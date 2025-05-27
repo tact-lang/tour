@@ -62,7 +62,7 @@ function App() {
       >
         <div className="pane left-pane" style={{ width: `${leftPaneWidthPercent}%` }}>
           <div className="pane-content">
-            <h2>Welcome!</h2>
+            <h2>Work in progress — come back later</h2>
 
             <div className="card">
               <h3>Current Width</h3>
@@ -83,7 +83,7 @@ function App() {
 
         <div className="pane right-pane">
           <div className="pane-content">
-            <h2>Code</h2>
+            {/*<h2>Code</h2>*/}
 
             <div className="card">
               <h3>"Hello, World!"</h3>
