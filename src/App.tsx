@@ -3,7 +3,7 @@ import React from "react";
 import "./App.css";
 
 function App() {
-  const [leftPaneWidth, setLeftPaneWidth] = React.useState(50); // Percentage
+  const [leftPaneWidthPercent, setLeftPaneWidthPercent] = React.useState(40);
   const [isDragging, setIsDragging] = React.useState(false);
   const containerRef = React.useRef(null);
 
@@ -19,7 +19,7 @@ function App() {
       let newWidthPercent = (mouseX / containerWidth) * 100;
       newWidthPercent = Math.max(40, Math.min(60, newWidthPercent));
 
-      setLeftPaneWidth(newWidthPercent);
+      setLeftPaneWidthPercent(newWidthPercent);
     };
 
     const handleMouseUp = () => {
@@ -60,16 +60,16 @@ function App() {
         className={`panes-container ${isDragging ? "dragging" : ""}`}
         ref={containerRef}
       >
-        <div className="pane left-pane" style={{ width: `${leftPaneWidth}%` }}>
+        <div className="pane left-pane" style={{ width: `${leftPaneWidthPercent}%` }}>
           <div className="pane-content">
-            <h2>Left Pane</h2>
+            <h2>Welcome!</h2>
 
             <div className="card">
               <h3>Current Width</h3>
               <p>
-                Left pane: <strong>{Math.round(leftPaneWidth)}%</strong>
+                Left pane: <strong>{Math.round(leftPaneWidthPercent)}%</strong>
                 <br />
-                Right pane: <strong>{Math.round(100 - leftPaneWidth)}%</strong>
+                Right pane: <strong>{Math.round(100 - leftPaneWidthPercent)}%</strong>
               </p>
             </div>
 
@@ -83,7 +83,58 @@ function App() {
 
         <div className="pane right-pane">
           <div className="pane-content">
-            <h2>Right Pane</h2>
+            <h2>Code</h2>
+
+            <div className="card">
+              <h3>"Hello, World!"</h3>
+              <pre>
+                <code>{`
+// Single-line (//) comments for occasional and casual annotations
+
+/// Documentation comments that support Markdown
+
+// Defining a contract
+contract HelloWorld {
+    // Listens to incoming Ping messages
+    receive(msg: Ping) {
+        // Sends a Pong reply message
+        reply(Pong {}.toCell());
+    }
+
+    // Listens to incoming Hello messages
+    receive(msg: Hello) {
+        // Replies with the received Hello message
+        reply(msg.toCell());
+    }
+
+    // Listens to incoming empty messages,
+    // which are very handy and cheap for the deployments.
+    receive() {
+        // Forward the remaining value in the
+        // incoming message back to the sender.
+        cashback(sender());
+    }
+}
+
+// A helper inlined function to send binary messages.
+// See the "Primitive types" section below for more info about cells.
+inline fun reply(msgBody: Cell) {
+    message(MessageParameters {
+        to: sender(),
+        value: 0,
+        mode: SendRemainingValue | SendIgnoreErrors,
+        body: msgBody,
+    });
+}
+
+// Empty message structs with specified 32-bit integer prefix.
+// See the "Structs and message structs" section below for more info.
+message(1) Ping {}
+message(2) Pong {}
+message(3) Hello {}
+                `}</code>
+              </pre>
+            </div>
 
             <div className="card">
               <h3>Here be dragons</h3>
