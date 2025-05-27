@@ -60,6 +60,12 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 ## Inspiration and references
 
 - [Tact by Example](https://tact-by-example.org/)
+- https://go.dev/tour
+- https://tour.gleam.run/
+- https://svelte.dev/tutorial/svelte/
+- https://code-basics.com/
+- https://www.learn-c.org/
+- https://docs.astro.build/en/tutorial/0-introduction/
 
 ## License
 

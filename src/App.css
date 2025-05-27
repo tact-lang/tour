@@ -1,3 +1,225 @@
+/* Base theme variables (Light) */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --card-bg: #f8f9fa;
+  --border-color: #e1e5e9;
+  --separator-color: #ccc;
+  --separator-hover: #999;
+  --switch-bg: #ddd;
+  --switch-thumb: #fff;
+  --switch-shadow: rgba(0, 0, 0, 0.2);
+}
+
+/* Dark theme variables */
+.App:has(#theme-toggle:checked) {
+  --bg-color: #1a1a1a;
+  --text-color: #e1e1e1;
+  --card-bg: #2d2d2d;
+  --border-color: #404040;
+  --separator-color: #555;
+  --separator-hover: #777;
+  --switch-bg: #4a90e2;
+  --switch-thumb: #ffffff;
+  --switch-shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* Base styles */
+.App {
+  height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 2px solid var(--border-color);
+  background-color: var(--bg-color);
+  z-index: 10;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.theme-toggle input[type="checkbox"] {
+  display: none;
+}
+
+.switch {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background-color: var(--switch-bg);
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.switch::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  background-color: var(--switch-thumb);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px var(--switch-shadow);
+}
+
+.theme-toggle input:checked + .switch::before {
+  transform: translateX(28px);
+}
+
+.theme-toggle input:focus + .switch {
+  outline: 2px solid var(--text-color);
+  outline-offset: 2px;
+}
+
+.theme-icon {
+  font-size: 1.2rem;
+  transition: opacity 0.3s ease;
+}
+
+.sun-icon {
+  opacity: 1;
+}
+
+.moon-icon {
+  opacity: 0.5;
+}
+
+.App:has(#theme-toggle:checked) .sun-icon {
+  opacity: 0.5;
+}
+
+.App:has(#theme-toggle:checked) .moon-icon {
+  opacity: 1;
+}
+
+.panes-container {
+  display: flex;
+  height: calc(100vh - 80px); /* Subtract header height */
+  position: relative;
+}
+
+.pane {
+  background-color: var(--bg-color);
+  overflow-y: auto;
+  padding: 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.left-pane {
+  border-right: 1px solid var(--border-color);
+}
+
+.right-pane {
+  flex: 1;
+}
+
+/* Vertical Separator */
+.separator {
+  width: 8px;
+  background-color: var(--separator-color);
+  cursor: col-resize;
+  position: relative;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.separator:hover,
+.separator.dragging {
+  background-color: var(--separator-hover);
+}
+
+.separator::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 40px;
+  background-color: var(--bg-color);
+  border-radius: 1px;
+}
+
+/* Content styling */
+.pane-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--switch-shadow);
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.card p {
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+}
+
+.feature-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.feature-list li:last-child {
+  border-bottom: none;
+}
+
+.feature-list li::before {
+  content: '✓';
+  color: #4a90e2;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+/* No selection during drag */
+.dragging * {
+  user-select: none !important;
+}
+
+/* OLD STUFF:
 .App {
   text-align: center;
 }
@@ -36,3 +258,4 @@
     transform: rotate(360deg);
   }
 }
+*/
