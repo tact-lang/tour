@@ -1,10 +1,54 @@
-body {
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.theme-light {
+  --bg-color: #ffffff;
+  --surface-color: #f5f6f8;
+  --text-color: #17181c;
+  --text-muted: #545861;
+  --border-color: #eceef2;
+  --code-bg: #f5f6f8;
+  --header-bg: #ffffff;
+  --accent-color: #0069cd;
+  --accent-hover: #003166;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --output-bg: #f5f6f8;
+  --output-border: #c0c2c7;
+}
+
+.theme-dark {
+  --bg-color: #17181c;
+  --surface-color: #24272f;
+  --text-color: #ffffff;
+  --text-muted: #888b96;
+  --border-color: #353841;
+  --code-bg: #24272f;
+  --header-bg: #17181c;
+  --accent-color: #0067c9;
+  --accent-hover: #a4ccff;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --output-bg: #24272f;
+  --output-border: #545861;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 code {
@@ -12,33 +56,4 @@ code {
     monospace;
 }
 
-/* Dark mode colors from the docs */
-:root {
-	--sl-color-accent-low: #00234c;
-	--sl-color-accent: #0067c9;
-	--sl-color-accent-high: #a4ccff;
-	--sl-color-white: #ffffff;
-	--sl-color-gray-1: #eceef2;
-	--sl-color-gray-2: #c0c2c7;
-	--sl-color-gray-3: #888b96;
-	--sl-color-gray-4: #545861;
-	--sl-color-gray-5: #353841;
-	--sl-color-gray-6: #24272f;
-	--sl-color-black: #17181c;
-}
-
-/* Light mode colors from the docs */
-:root[data-theme='light'] {
-	--sl-color-accent-low: #bddaff;
-	--sl-color-accent: #0069cd;
-	--sl-color-accent-high: #003166;
-	--sl-color-white: #17181c;
-	--sl-color-gray-1: #24272f;
-	--sl-color-gray-2: #353841;
-	--sl-color-gray-3: #545861;
-	--sl-color-gray-4: #888b96;
-	--sl-color-gray-5: #c0c2c7;
-	--sl-color-gray-6: #eceef2;
-	--sl-color-gray-7: #f5f6f8;
-	--sl-color-black: #ffffff;
-}
+/* TODO: use doc-like dark/light mode switching */
