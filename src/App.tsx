@@ -1,10 +1,12 @@
 import React from "react";
+import Editor from "@monaco-editor/react";
+// import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import tactMonarchLanguage from "./tactMonarchLanguage";
 import "./App.css";
 
 interface Example {
   id: string;
   title: string;
-  description: string;
   content: string;
   code: string;
 }
@@ -13,7 +15,6 @@ const examples: Example[] = [
   {
     id: "welcome",
     title: "Welcome to the Tact language tour! WIP, come back later!",
-    description: "An interactive introduction to Tact smart contract programming",
     content: `Tact is a statically typed language designed specifically for TON blockchain smart contracts. It provides safety, efficiency, and ease of use while maintaining the power needed for complex smart contract development.`,
     code: `// Welcome to Tact!
 // This is a simple "Hello World" contract
@@ -61,10 +62,8 @@ message(3) Hello {}`
   {
     id: "step-2",
     title: "WIP",
-    description: "WIP",
-    content: `:)`,
-    code: `
-// Defining a new Message type, which has one field
+    content: `To be added.`,
+    code: `// Defining a new Message type, which has one field
 // and an automatically assigned 32-bit opcode prefix
 message Add {
     // unsigned integer value stored in 4 bytes
@@ -112,28 +111,55 @@ contract SimpleCounter(
 
 function App() {
   const [currentIndex, setCurrentIndex] = React.useState(0);
-  const [isDarkMode, setIsDarkMode] = React.useState(false);
-  const [output, setOutput] = React.useState("Ready to run code...");
+  const [isDarkTheme, setIsDarkTheme] = React.useState(localStorage.getItem('theme') === 'dark');
 
   React.useEffect(() => {
-    document.documentElement.classList.toggle('theme-dark', isDarkMode);
-    document.documentElement.classList.toggle('theme-light', !isDarkMode);
-  }, [isDarkMode]);
+    localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+    document.documentElement.classList.toggle('theme-dark', isDarkTheme);
+    document.documentElement.classList.toggle('theme-light', !isDarkTheme);
+  }, [isDarkTheme]);
 
   const currentExample = examples[currentIndex];
 
-  const runCode = () => {
-    setOutput(`
-// In a real environment, this would:
-// 1. Compile the Tact code
-// 2. Deploy to Sandbox
-// 3. Provide some means to execute functions
+  return (
+    <div className="App">
+      <nav className="navbar">
+        <a href="/" className="logo">
+          <span className="logo-icon">⚡</span>
+          Tact Tour
+        </a>
+        <div className="nav-right">
+          <a href="https://docs.tact-lang.org" className="link" target="_blank" rel="noopener noreferrer">
+            docs.tact-lang.org
+          </a>
+          <div className="theme-picker">
+            <button
+              type="button"
+              className={`theme-button ${isDarkTheme ? 'theme-dark' : 'theme-light'}`}
+              onClick={() => setIsDarkTheme(!isDarkTheme)}
+              title={`Switch to ${isDarkTheme ? 'light' : 'dark'} theme`}
+            >
+              {isDarkTheme ? '☀️' : '🌙'}
+            </button>
+          </div>
+        </div>
+      </nav>
 
-✅ Contract compiled successfully!
-📝 Ready to receive messages
-`);
-  };
+      <article id="playground">
+        <LeftPane currentExample={currentExample} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+        <RightPane defaultContent={currentExample.code} isDarkTheme={isDarkTheme} />
+      </article>
+    </div>
+  );
+}
 
+type LeftPaneProps = {
+  currentExample: Example;
+  currentIndex: number;
+  setCurrentIndex: (value: number) => void;
+};
+
+function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPaneProps) {
   const goNext = () => {
     if (currentIndex < examples.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -146,88 +172,83 @@ function App() {
     }
   };
 
-  return (
-    <div className="App">
-      <nav className="navbar">
-        <a href="/" className="logo">
-          <span className="logo-icon">⚡</span>
-          Tour of Tact
-          {/* Tact Language Tour */}
-        </a>
-        <div className="nav-right">
-          <a href="https://docs.tact-lang.org" className="link" target="_blank" rel="noopener noreferrer">
-            docs.tact-lang.org
-          </a>
-          <div className="theme-picker">
-            <button
-              type="button"
-              className={`theme-button ${isDarkMode ? '-dark' : '-light'}`}
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
-            >
-              {isDarkMode ? '☀️' : '🌙'}
-            </button>
-          </div>
+  return (<>
+    <section id="left" className="content-nav">
+      <div>
+        <h2>{currentExample.title}</h2>
+        <div className="content-text">
+          {currentExample.content.split('\n\n').map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))}
         </div>
+      </div>
+      <nav className="prev-next">
+        <button
+          onClick={goPrevious}
+          disabled={currentIndex === 0}
+          className="nav-btn"
+        >
+          {currentIndex === 0 ? 'Back' : 'Previous'}
+        </button>
+        <span>—</span>
+        <button className="nav-btn contents">
+          Contents ({currentIndex + 1}/{examples.length})
+        </button>
+        <span>—</span>
+        <button
+          onClick={goNext}
+          disabled={currentIndex === examples.length - 1}
+          className="nav-btn"
+        >
+          {currentIndex === examples.length - 1 ? 'End' : 'Next'}
+        </button>
       </nav>
+    </section>
+  </>);
+}
 
-      <article id="playground">
-        <section id="left" className="content-nav">
-          <div>
-            <h2>{currentExample.title}</h2>
-            <div className="content-text">
-              {currentExample.content.split('\n\n').map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
-            </div>
-          </div>
-          <nav className="prev-next">
-            <button
-              onClick={goPrevious}
-              disabled={currentIndex === 0}
-              className="nav-btn"
-            >
-              {currentIndex === 0 ? 'Back' : 'Previous'}
-            </button>
-            <span>—</span>
-            <button className="nav-btn contents">
-              Contents ({currentIndex + 1}/{examples.length})
-            </button>
-            <span>—</span>
-            <button
-              onClick={goNext}
-              disabled={currentIndex === examples.length - 1}
-              className="nav-btn"
-            >
-              {currentIndex === examples.length - 1 ? 'End' : 'Next'}
-            </button>
-          </nav>
-        </section>
+type RightPaneProps = { defaultContent: string, isDarkTheme: boolean };
 
-        <section id="right">
-          <section id="editor">
-            <div className="editor-header">
-              <span className="filename">contract.tact</span>
-              <button className="run-button" onClick={runCode}>
-                ▶ Run
-              </button>
-            </div>
-            <div className="editor-content">
-              <pre className="code-editor">
-                <code>{currentExample.code}</code>
-              </pre>
-            </div>
-          </section>
-          <aside id="output">
-            <div className="output-header">Output</div>
-            <div className="output-content">
-              <pre>{output}</pre>
-            </div>
-          </aside>
-        </section>
-      </article>
-    </div>
-  );
+function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
+  const [output, _setOutput] = React.useState("(Soon) Save changes to re-compile and re-deploy...");
+  const editorRef = React.useRef<any | null>(null);
+
+  return (<>
+    <section id="right">
+      <section id="editor">
+        <div className="editor-content">
+          {/* NOTE: Web IDE usage: https://github.com/tact-lang/web-ide/blob/main/src/components/workspace/Editor/Editor.tsx */}
+          <Editor
+            defaultLanguage="tact"
+            defaultValue={undefined}
+            value={defaultContent}
+            theme={isDarkTheme ? "vs-dark" : "vs"}
+            options={{
+              minimap: { enabled: false },
+              fontSize: 14,
+              bracketPairColorization: { enabled: true }
+            }}
+            beforeMount={(monaco) => {
+              monaco.languages.register({ id: "tact" });
+              monaco.languages.setMonarchTokensProvider("tact", tactMonarchLanguage());
+            }}
+            onMount={(editor, _monaco) => {
+              editorRef.current = editor;
+            }}
+            onChange={(_value, _ev) => {
+              if (!editorRef.current) return;
+            }}
+          />
+        </div>
+      </section>
+      <aside id="output">
+        {/* <div className="output-header">Output</div> */}
+        <div className="output-content">
+          <pre>{output}</pre>
+        </div>
+      </aside>
+    </section>
+  </>);
 }
 
 export default App;

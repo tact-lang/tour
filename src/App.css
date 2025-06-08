@@ -14,9 +14,10 @@
   background-color: var(--header-bg);
   border-bottom: 1px solid var(--border-color);
   box-shadow: var(--shadow);
-  position: sticky;
+  position: static;
   top: 0;
-  z-index: 100;
+  /* position: sticky; */
+  /* z-index: 100; */
 }
 
 .logo {
@@ -233,29 +234,9 @@
 
 .editor-content {
   flex: 1;
-  overflow: auto;
-  min-height: 0;
-}
-
-.code-editor {
-  margin: 0;
-  padding: 1.5rem;
-  background-color: var(--code-bg);
-  font-family: "SF Mono", Monaco, Inconsolata, "Roboto Mono", monospace;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: var(--text-color);
-  overflow-x: auto;
-  white-space: pre;
-  /* height: 100%; */
-  min-height: 300px;
-  max-height: fit-content;
-}
-
-.code-editor code {
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
+  overflow: hidden;
+  /* from auto */
+  /* min-height: 0; */
 }
 
 /* Output section */

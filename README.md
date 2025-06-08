@@ -66,9 +66,12 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 - https://code-basics.com/
 - https://www.learn-c.org/
 - https://docs.astro.build/en/tutorial/0-introduction/
+- https://tourofrust.com/
+- https://jgthms.com/web-design-in-4-minutes/
+- https://jgthms.com/javascript-in-14-minutes/
+- https://scrimba.com/learn-html-and-css-c0p?via=mdn
+- https://developer.mozilla.org/en-US/docs/Learn_web_development/Core
 
 ## License
 
 [MIT](./LICENSE) © TON Studio
-
-
