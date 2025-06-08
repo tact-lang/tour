@@ -210,6 +210,7 @@ function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPanePro
 type RightPaneProps = { defaultContent: string, isDarkTheme: boolean };
 
 function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [output, _setOutput] = React.useState("(Soon) Save changes to re-compile and re-deploy...");
   const editorRef = React.useRef<any | null>(null);
 

@@ -233,6 +233,7 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
 };
 
 // TODO: convert all into Monarch definition.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const RemainingToConvert = `
 {
   "name": "tact",
