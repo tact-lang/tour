@@ -1,5 +1,6 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
+// NOTE: Lookbehinds don't work as they do in TextMate
 export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage {
   return {
     defaultToken: "",
@@ -10,10 +11,10 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
     tokenizer: {
       patterns: [
         { "include": "@whitespace" },
-        // { "include": "@annotation" }, // TODO
+        { "include": "@annotation" },
         { "include": "@literal" },
-        // { "include": "@invalid" }, // TODO
-        // { "include": "@constant" }, // TODO
+        { "include": "@invalid" },
+        { "include": "@constant" },
         { "include": "@type" },
         { "include": "@expression" },
         { "include": "@punctuation" },
@@ -31,6 +32,73 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         [/\/\*/, "comment", "@push"],
         ["\\*/", "comment", "@pop"],
         [/[/*]/, "comment"],
+      ],
+      annotation: [
+        {
+          "regex": "^\\s*(@\\\\{0}name\\()([^)]*)(\\))",
+          "action": ["annotation", "pragma", "annotation"],
+        },
+        {
+          "regex": "\\s*(@\\\\{0}interface\\()\\s*(\"[^\"]*\")\\s*(\\))",
+          "action": ["annotation", "string", "annotation"],
+        },
+        {
+          "regex": "(?<!\\.)\\b(asm)\\b",
+          "action": {
+            "token": "keyword.other.asm.tact",
+            "next": "@asm_arrangement_start",
+          },
+        },
+        // Fallback matches
+        {
+          "regex": "\\s*(@\\\\{0}(?:name|interface))\\b",
+          "action": "annotation",
+        },
+        {
+          "regex": "(?<!\\.)\\b(asm)\\b",
+          "action": "keyword.other.asm.tact",
+        },
+      ],
+      asm_arrangement_start: [
+        {
+          "regex": "\\(",
+          "action": {
+            "token": "punctuation.brackets.round.tact",
+            "bracket": "@open",
+            "next": "@asm_arrangement",
+          },
+        },
+        {
+          "regex": ".",
+          "action": {
+            "token": "@rematch",
+            "next": "@pop",
+          }
+        },
+      ],
+      asm_arrangement: [
+        { "include": "@invalid" },
+        { "include": "@variable" },
+        {
+          "regex": "->",
+          "action": "keyword.operator.mapsto.tact"
+        },
+        {
+          "regex": "\\b(0[0-9]*)\\b",
+          "action": "constant.numeric.decimal.tact"
+        },
+        {
+          "regex": "\\b([1-9](?:_?[0-9])*)\\b",
+          "action": "constant.numeric.decimal.tact"
+        },
+        {
+          "regex": "\\)",
+          "action": {
+            "token": "punctuation.brackets.round.tact",
+            "bracket": "@close",
+            "next": "@pop",
+          },
+        },
       ],
       literal: [
         {
@@ -57,7 +125,13 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
           "regex": "(?<!\\.)\\b(true|false)\\b",
           "action": "constant.language.bool.tact"
         },
-        [/"/, "string", "@string"],
+        {
+          "regex": "\"",
+          "action": {
+            "token": "string",
+            "next": "@string",
+          }
+        },
         {
           "regex": "(?<!\\.)\\b(self)\\b",
           "action": "variable.language.this.tact"
@@ -72,15 +146,96 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         [/\\./, "string.escape.invalid"],
         [/"/, "string", "@pop"]
       ],
-      type: [
-        { "include": "@simple_type" },
-        // TODO: map, bounced, as-tlb
+      invalid: [{
+        "regex": "\\b__(?:gen|tact)[a-zA-Z0-9_]*\\b",
+        "action": "invalid.illegal.identifier.tact",
+      }],
+      constant: [
+        {
+          "regex": "(?<=self\\.)(storageReserve)\\b",
+          "action": "constant.other.builtin.tact"
+        },
+        {
+          "regex": "(?<!\\.)\\b(SendDefaultMode|SendRemainingValue|SendRemainingBalance|SendPayGasSeparately|SendPayFwdFeesSeparately|SendIgnoreErrors|SendBounceIfActionFail|SendDestroyIfZero|SendOnlyEstimateFee|ReserveExact|ReserveAllExcept|ReserveAtMost|ReserveAddOriginalBalance|ReserveInvertSign|ReserveBounceIfActionFail|TactExitCodeNullReferenceException|TactExitCodeInvalidSerializationPrefix|TactExitCodeInvalidIncomingMessage|TactExitCodeConstraintsError|TactExitCodeAccessDenied|TactExitCodeContractStopped|TactExitCodeInvalidArgument|TactExitCodeContractCodeNotFound|TactExitCodeInvalidStandardAddress|TactExitCodeNotBasechainAddress)\\b",
+          "action": "constant.other.builtin.tact"
+        },
+        {
+          "regex": "\\b([A-Z]{2}[A-Z0-9_]*)\\b",
+          "action": "constant.other.caps.tact"
+        },
+        {
+          "regex": "(?<!\\.)\\b(const)\\s+([a-zA-Z_][A-Za-z0-9_]*)\\b",
+          "action": ["keyword.other.tact", "constant.other.declaration.tact"]
+        },
+        {
+          "regex": "(?<!\\.)\\b(null)\\b",
+          "action": "constant.language.null.tact"
+        }
       ],
-      simple_type: [
+      type: [
+        { "include": "@type_simple" },
+        {
+          "regex": "(?<!\\.)\\b(bounced|map|set)\\b",
+          "action": {
+            "token": "type.identifier.tact",
+            "next": "@type_generic_start",
+          },
+        },
+      ],
+      type_simple: [
         {
           "regex": "(?<!\\.)\\b([A-Z][a-zA-Z0-9_]*)(\\??)",
           "action": ["type.identifier.tact", "keyword.operator.optional.tact"],
-        }
+        },
+        { "include": "@as" },
+      ],
+      type_generic_start: [
+        {
+          "regex": "<",
+          "action": {
+            "token": "punctuation.brackets.angle.tact",
+            "bracket": "@open",
+            "next": "@type_generic",
+          },
+        },
+        {
+          "regex": ".",
+          "action": { "token": "@rematch", "next": "@pop" },
+        },
+      ],
+      type_generic: [
+        { "include": "@type_simple" },
+        { "include": "@as" },
+        {
+          "regex": ",",
+          "action": "punctuation.comma.tact"
+        },
+        {
+          "regex": ">",
+          "action": {
+            "token": "punctuation.brackets.angle.tact",
+            "bracket": "@close",
+            "next": "@pop",
+          },
+        },
+      ],
+      as: [
+        {
+          "regex": "(?<!\\.)\\b(as)\\b",
+          "action": {
+            "token": "keyword.other.as.tact storage.modifier.tact",
+            // "next": "@as_tlb",
+            "switchTo": "@as_tlb",
+            // NOTE: switchTo makes a smaller chunk of the code lose colors
+            // when there are any issues with the serialization format given
+          },
+        },
+      ],
+      as_tlb: [
+        {
+          "regex": "\\b(coins|varu?int(?:32|16)|remaining|bytes(?:32|64)|int257|u?int(?:25[0-6]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?))\\b",
+          "action": { "token": "type.identifier.tact", "next": "@pop", },
+        },
       ],
       expression: [
         {
@@ -92,7 +247,7 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
           "action": "keyword.operator.bitwise.tact"
         },
         {
-          "regex": "(\\+=|-=|\\*=|/=|%=|\\^=|&=|\\|=|<<=|>>=)",
+          "regex": "(\\+=|-=|\\*=|/=|%=|\\^=|&=|\\|=|\\|\\|=|&&=|<<=|>>=)",
           "action": "keyword.operator.assignment.tact"
         },
         {
@@ -116,8 +271,7 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
           "action": "keyword.operator.new.tact"
         },
         {
-          // TODO: revisit this one:
-          "regex": "([?:])",
+          "regex": "(?!\\?\\.\\s*[^[:digit:]])(\\?)(?!\\?)",
           "action": "keyword.operator.ternary.tact",
         },
       ],
@@ -164,24 +318,21 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
           "regex": "(?<!\\.)\\b(let|const)\\b",
           "action": "keyword.other.tact"
         },
+        // NOTE: `as` keyword has its own rule: "@as"
         {
-          "regex": "(?<!\\.)\\b(as)\\b",
-          "action": "keyword.other.as.tact storage.modifier.tact"
-        },
-        {
-          "regex": "(?<!\\.)\\b(struct)\\b",
+          "regex": "(?<!\\.)\\b(struct)\\b(?!\\s*:)",
           "action": "keyword.other.struct.tact"
         },
         {
-          "regex": "(?<!\\.)\\b(message)\\b",
+          "regex": "(?<!\\.)\\b(message)\\b(?!\\s*(?::|\\(\\s*M|\\(\\s*\\)))",
           "action": "keyword.other.message.tact"
         },
         {
-          "regex": "(?<!\\.)\\b(trait)\\b",
+          "regex": "(?<!\\.)\\b(trait)\\b(?!\\s*:)",
           "action": "keyword.other.trait.tact"
         },
         {
-          "regex": "(?<!\\.)\\b(contract)\\b",
+          "regex": "(?<!\\.)\\b(contract)\\b(?!\\s*:)",
           "action": "keyword.other.contract.tact"
         },
         {
@@ -213,7 +364,7 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         {
           "regex": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
           "action": ["variable.tact", "punctuation.brackets.round.tact"],
-          // "action": ["entity.name.function.tact", "punctuation.brackets.round.tact"],
+          // "entity.name.function.tact"
         }
       ],
       variable: [
@@ -224,293 +375,9 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         {
           "regex": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
           "action": "nothing.tact"
-          // "action": "nothing.tact"
-          // "action": "variable.other.tact"
+          // "variable.other.tact"
         }
       ],
     },
   };
 };
-
-// TODO: convert all into Monarch definition.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const RemainingToConvert = `
-{
-  "name": "tact",
-  "scopeName": "source.tact",
-  "fileTypes": ["tact"],
-  "patterns": [
-    { "include": "#annotation" },
-    { "include": "#invalid" },
-    { "include": "#constant" },
-  ],
-  "repository": {
-    "annotation": {
-      "patterns": [
-        {
-          "comment": "@name() in native functions",
-          "begin": "^\\s*(@name)\\s*(\\()",
-          "beginCaptures": {
-            "1": {
-              "name": "entity.other.attribute-name.tact"
-            },
-            "2": {
-              "name": "punctuation.brackets.round.tact"
-            }
-          },
-          "patterns": [
-            {
-              "comment": "FunC identifier",
-              "match": "(.*?)",
-              "name": "entity.name.function.func.tact"
-            }
-          ],
-          "end": "\\)",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.brackets.round.tact"
-            }
-          }
-        },
-        {
-          "comment": "One or more @interface() before traits and contracts",
-          "begin": "(?<!\\.)(@interface)\\s*(\\()",
-          "beginCaptures": {
-            "1": {
-              "name": "entity.other.attribute-name.tact"
-            },
-            "2": {
-              "name": "punctuation.brackets.round.tact"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#string"
-            }
-          ],
-          "end": "\\)",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.brackets.round.tact"
-            }
-          }
-        },
-        {
-          "comment": "Asm arrangements",
-          "begin": "(?<!\\.)(asm)\\s*(\\()",
-          "beginCaptures": {
-            "1": {
-              "name": "keyword.other.asm.tact"
-            },
-            "2": {
-              "name": "punctuation.brackets.round.tact"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#variable"
-            },
-            {
-              "match": "->",
-              "name": "keyword.operator.mapsto.tact"
-            },
-            {
-              "comment": "Decimal integer WITH leading zero",
-              "match": "\\b(0[0-9]*)\\b",
-              "name": "constant.numeric.decimal.tact"
-            },
-            {
-              "comment": "Decimal integer WITHOUT leading zero",
-              "match": "\\b([1-9](?:_?[0-9])*)\\b",
-              "name": "constant.numeric.decimal.tact"
-            }
-          ],
-          "end": "\\)",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.brackets.round.tact"
-            }
-          }
-        },
-        {
-          "comment": "Fallback match",
-          "match": "(?<!\\.)\\b(@name|@interface)\\b",
-          "name": "entity.other.attribute-name.tact"
-        },
-        {
-          "comment": "Fallback match",
-          "match": "(?<!\\.)\\b(asm)\\b",
-          "name": "keyword.other.asm.tact"
-        }
-      ]
-    },
-
-    "invalid": {
-      "patterns": [
-        {
-          "comment": "Anything starting with __gen or __tact",
-          "match": "\\b__(?:gen|tact)[a-zA-Z0-9_]*\\b",
-          "name": "invalid.illegal.identifier.tact"
-        }
-      ]
-    },
-
-    "constant": {
-      "patterns": [
-        {
-          "comment": "self.storageReserve",
-          "match": "(?<=self\\.)(storageReserve)\\b",
-          "name": "constant.other.builtin.tact"
-        },
-        {
-          "comment": "Other constants from the core library",
-          "match": "(?<!\\.)\\b(SendDefaultMode|SendRemainingValue|SendRemainingBalance|SendPayGasSeparately|SendIgnoreErrors|SendBounceIfActionFail|SendDestroyIfZero|SendOnlyEstimateFee|ReserveExact|ReserveAllExcept|ReserveAtMost|ReserveAddOriginalBalance|ReserveInvertSign|ReserveBounceIfActionFail)\\b",
-          "name": "constant.other.builtin.tact"
-        },
-        {
-          "comment": "ALL CAPS constants",
-          "match": "\\b([A-Z]{2}[A-Z0-9_]*)\\b",
-          "name": "constant.other.caps.tact"
-        },
-        {
-          "comment": "Constant declaration or definition",
-          "match": "(?<!\\.)\\b(const)\\s+([a-zA-Z_][A-Za-z0-9_]*)\\b",
-          "captures": {
-            "1": {
-              "name": "keyword.other.tact"
-            },
-            "2": {
-              "name": "constant.other.declaration.tact"
-            }
-          }
-        },
-        {
-          "comment": "null",
-          "match": "(?<!\\.)\\b(null)\\b",
-          "name": "constant.language.null.tact"
-        }
-      ]
-    },
-
-    "type": {
-      "patterns": [
-        {
-          "include": "#simple-type"
-        },
-        {
-          "comment": "bounced<T>",
-          "begin": "(?<!\\.)\\b(bounced)\\s*(<)",
-          "beginCaptures": {
-            "1": {
-              "name": "entity.name.type.tact"
-            },
-            "2": {
-              "name": "punctuation.brackets.angle.tact"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#simple-type"
-            }
-          ],
-          "end": ">",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.brackets.angle.tact"
-            }
-          }
-        },
-        {
-          "comment": "map<K, V>",
-          "begin": "(?<!\\.)\\b(map)\\s*(<)",
-          "beginCaptures": {
-            "1": {
-              "name": "entity.name.type.tact"
-            },
-            "2": {
-              "name": "punctuation.brackets.angle.tact"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#simple-type"
-            },
-            {
-              "match": ",",
-              "name": "punctuation.comma.tact"
-            },
-            {
-              "include": "#as-tlb"
-            }
-          ],
-          "end": ">",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.brackets.angle.tact"
-            }
-          }
-        },
-        {
-          "include": "#as-tlb"
-        }
-      ]
-    },
-
-    "simple-type": {
-      "comment": "Simple types",
-      "match": "(?<!\\.)\\b([A-Z][a-zA-Z0-9_]*)(\\??)",
-      "captures": {
-        "1": {
-          "name": "entity.name.type.tact"
-        },
-        "2": {
-          "name": "keyword.operator.optional.tact"
-        }
-      }
-    },
-
-    "as-tlb": {
-      "comment": "Serialization",
-      "patterns": [
-        {
-          "match": "(?<!\\.)\\b(as)\\s+(coins|varu?int(?:32|16)|remaining|bytes(?:32|64)|int257|u?int(?:25[0-6]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?))\\b",
-          "captures": {
-            "1": {
-              "name": "keyword.other.as.tact storage.modifier.tact"
-            },
-            "2": {
-              "name": "entity.name.type.tact"
-            }
-          }
-        }
-      ]
-    },
-
-    "expression": {
-      "patterns": [
-        {
-          "comment": "Ternary expression",
-          "begin": "(?!\\?\\.\\s*[^[:digit:]])(\\?)(?!\\?)",
-          "beginCaptures": {
-            "1": {
-              "name": "keyword.operator.ternary.tact"
-            }
-          },
-          "patterns": [
-            {
-              "include": "$self"
-            }
-          ],
-          "end": "\\s*(:)",
-          "endCaptures": {
-            "1": {
-              "name": "keyword.operator.ternary.tact"
-            }
-          }
-        }
-      ]
-    },
-
-  }
-}
-`;
