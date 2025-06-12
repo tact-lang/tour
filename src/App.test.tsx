@@ -4,6 +4,6 @@ import App from './App';
 
 test('renders title', () => {
   render(<App />);
-  const titleElement = screen.getByText(/Tour of Tact/i);
+  const titleElement = screen.getByText(/Tact Tour/i);
   expect(titleElement).toBeInTheDocument();
 });

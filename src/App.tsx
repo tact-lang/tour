@@ -1,117 +1,26 @@
 import React from "react";
 import Editor from "@monaco-editor/react";
+import type { Lesson } from "./types";
 // import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import tactMonarchLanguage from "./tactMonarchLanguage";
+
 import "./App.css";
+import tactMonarchDefinition from "./tactMonarchDefinition";
+import chapter0 from "./content/chapter0";
+import chapter1 from "./content/chapter1";
 
-interface Example {
-  id: string;
-  title: string;
-  content: string;
-  code: string;
-}
-
-const examples: Example[] = [
-  {
-    id: "welcome",
-    title: "Welcome to the Tact language tour! WIP, come back later!",
-    content: `Tact is a statically typed language designed specifically for TON blockchain smart contracts. It provides safety, efficiency, and ease of use while maintaining the power needed for complex smart contract development.`,
-    code: `// Welcome to Tact!
-// This is a simple "Hello World" contract
-
-// Defining a contract
-contract HelloWorld {
-    // Listens to incoming Ping messages
-    receive(msg: Ping) {
-        // Sends a Pong reply message
-        reply(Pong {}.toCell());
-    }
-
-    // Listens to incoming Hello messages
-    receive(msg: Hello) {
-        // Replies with the received Hello message
-        reply(msg.toCell());
-    }
-
-    // Listens to incoming empty messages,
-    // which are very handy and cheap for the deployments.
-    receive() {
-        // Forward the remaining value in the
-        // incoming message back to the sender.
-        cashback(sender());
-    }
-}
-
-// A helper inlined function to send binary messages.
-// See the "Primitive types" section below for more info about cells.
-inline fun reply(msgBody: Cell) {
-    message(MessageParameters {
-        to: sender(),
-        value: 0,
-        mode: SendRemainingValue | SendIgnoreErrors,
-        body: msgBody,
-    });
-}
-
-// Empty message structs with specified 32-bit integer prefix.
-// See the "Structs and message structs" section below for more info.
-message(1) Ping {}
-message(2) Pong {}
-message(3) Hello {}`
-  },
-  {
-    id: "step-2",
-    title: "WIP",
-    content: `To be added.`,
-    code: `// Defining a new Message type, which has one field
-// and an automatically assigned 32-bit opcode prefix
-message Add {
-    // unsigned integer value stored in 4 bytes
-    amount: Int as uint32;
-}
-
-// Defining a contract
-contract SimpleCounter(
-    // Persistent state variables of the contract:
-    counter: Int as uint32, // actual value of the counter
-    id: Int as uint32, // a unique id to deploy multiple instances
-                       // of this contract in a same workchain
-    // Their default or initial values are supplied during deployment.
-) {
-    // Registers a receiver of empty messages from other contracts.
-    // It handles internal messages with null body
-    // and is very handy and cheap for the deployments.
-    receive() {
-        // Forward the remaining value in the
-        // incoming message back to the sender.
-        cashback(sender());
-    }
-
-    // Registers a binary receiver of the Add message bodies.
-    receive(msg: Add) {
-        self.counter += msg.amount; // <- increase the counter
-        // Forward the remaining value in the
-        // incoming message back to the sender.
-        cashback(sender());
-    }
-
-    // A getter function, which can only be called from off-chain
-    // and never by other contracts. This one is useful to see the counter state.
-    get fun counter(): Int {
-        return self.counter; // <- return the counter value
-    }
-
-    // Another getter function, but for the id:
-    get fun id(): Int {
-        return self.id; // <- return the id value
-    }
-}`
-  },
+const lessons: Lesson[] = [
+  chapter0.home,
+  ...(chapter1.lessons.flatMap((lesson) => {
+    lesson.url = chapter1.url + "/" + lesson.url;
+    return lesson;
+  })),
+  chapter0.last,
 ];
 
 function App() {
+  const themeState = localStorage.getItem('theme');
   const [currentIndex, setCurrentIndex] = React.useState(0);
-  const [isDarkTheme, setIsDarkTheme] = React.useState(localStorage.getItem('theme') === 'dark');
+  const [isDarkTheme, setIsDarkTheme] = React.useState(themeState === null || themeState === 'dark');
 
   React.useEffect(() => {
     localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
@@ -119,7 +28,7 @@ function App() {
     document.documentElement.classList.toggle('theme-light', !isDarkTheme);
   }, [isDarkTheme]);
 
-  const currentExample = examples[currentIndex];
+  const currentExample = lessons[currentIndex];
 
   return (
     <div className="App">
@@ -154,14 +63,14 @@ function App() {
 }
 
 type LeftPaneProps = {
-  currentExample: Example;
+  currentExample: Lesson;
   currentIndex: number;
   setCurrentIndex: (value: number) => void;
 };
 
 function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPaneProps) {
   const goNext = () => {
-    if (currentIndex < examples.length - 1) {
+    if (currentIndex < lessons.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
   };
@@ -175,12 +84,8 @@ function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPanePro
   return (<>
     <section id="left" className="content-nav">
       <div>
-        <h2>{currentExample.title}</h2>
-        <div className="content-text">
-          {currentExample.content.split('\n\n').map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
-        </div>
+        <h1>{currentExample.title}</h1>
+        <div className="content-text">{currentExample.content}</div>
       </div>
       <nav className="prev-next">
         <button
@@ -192,15 +97,15 @@ function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPanePro
         </button>
         <span>—</span>
         <button className="nav-btn contents">
-          Contents ({currentIndex + 1}/{examples.length})
+          Contents ({currentIndex + 1}/{lessons.length})
         </button>
         <span>—</span>
         <button
           onClick={goNext}
-          disabled={currentIndex === examples.length - 1}
+          disabled={currentIndex === lessons.length - 1}
           className="nav-btn"
         >
-          {currentIndex === examples.length - 1 ? 'End' : 'Next'}
+          {currentIndex === lessons.length - 1 ? 'End' : 'Next'}
         </button>
       </nav>
     </section>
@@ -231,7 +136,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
             }}
             beforeMount={(monaco) => {
               monaco.languages.register({ id: "tact" });
-              monaco.languages.setMonarchTokensProvider("tact", tactMonarchLanguage());
+              monaco.languages.setMonarchTokensProvider("tact", tactMonarchDefinition());
             }}
             onMount={(editor, _monaco) => {
               editorRef.current = editor;

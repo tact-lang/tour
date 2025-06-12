@@ -1,12 +1,12 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 // NOTE: Lookbehinds don't work as they do in TextMate
-export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage {
+export default function tactMonarchDefinition(): monaco.languages.IMonarchLanguage {
   return {
     defaultToken: "",
     brackets: [
-      { open: "{", close: "}", token: "punctuation.brackets.curly.tact" },
-      { open: "(", close: ")", token: "punctuation.brackets.round.tact" },
+      { open: "{", close: "}", token: "punctuation.brackets.curly" },
+      { open: "(", close: ")", token: "punctuation.brackets.round" },
     ],
     tokenizer: {
       patterns: [
@@ -45,7 +45,7 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         {
           "regex": "(?<!\\.)\\b(asm)\\b",
           "action": {
-            "token": "keyword.other.asm.tact",
+            "token": "keyword.other.asm",
             "next": "@asm_arrangement_start",
           },
         },
@@ -56,14 +56,14 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         },
         {
           "regex": "(?<!\\.)\\b(asm)\\b",
-          "action": "keyword.other.asm.tact",
+          "action": "keyword.other.asm",
         },
       ],
       asm_arrangement_start: [
         {
           "regex": "\\(",
           "action": {
-            "token": "punctuation.brackets.round.tact",
+            "token": "punctuation.brackets.round",
             "bracket": "@open",
             "next": "@asm_arrangement",
           },
@@ -81,20 +81,20 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         { "include": "@variable" },
         {
           "regex": "->",
-          "action": "keyword.operator.mapsto.tact"
+          "action": "keyword.operator.mapsto"
         },
         {
           "regex": "\\b(0[0-9]*)\\b",
-          "action": "constant.numeric.decimal.tact"
+          "action": "constant.numeric.decimal"
         },
         {
           "regex": "\\b([1-9](?:_?[0-9])*)\\b",
-          "action": "constant.numeric.decimal.tact"
+          "action": "constant.numeric.decimal"
         },
         {
           "regex": "\\)",
           "action": {
-            "token": "punctuation.brackets.round.tact",
+            "token": "punctuation.brackets.round",
             "bracket": "@close",
             "next": "@pop",
           },
@@ -103,27 +103,27 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
       literal: [
         {
           "regex": "\\b(0[xX][a-fA-F0-9](?:_?[a-fA-F0-9])*)\\b",
-          "action": "constant.numeric.hex.tact"
+          "action": "constant.numeric.hex"
         },
         {
           "regex": "\\b(0[oO][0-7](?:_?[0-7])*)\\b",
-          "action": "constant.numeric.oct.tact"
+          "action": "constant.numeric.oct"
         },
         {
           "regex": "\\b(0[bB][01](?:_?[01])*)\\b",
-          "action": "constant.numeric.bin.tact"
+          "action": "constant.numeric.bin"
         },
         {
           "regex": "\\b(0[0-9]*)\\b",
-          "action": "constant.numeric.decimal.tact"
+          "action": "constant.numeric.decimal"
         },
         {
           "regex": "\\b([1-9](?:_?[0-9])*)\\b",
-          "action": "constant.numeric.decimal.tact"
+          "action": "constant.numeric.decimal"
         },
         {
           "regex": "(?<!\\.)\\b(true|false)\\b",
-          "action": "constant.language.bool.tact"
+          "action": "constant.language.bool"
         },
         {
           "regex": "\"",
@@ -134,7 +134,7 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         },
         {
           "regex": "(?<!\\.)\\b(self)\\b",
-          "action": "variable.language.this.tact"
+          "action": "variable.language.this"
         },
       ],
       string: [
@@ -148,28 +148,28 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
       ],
       invalid: [{
         "regex": "\\b__(?:gen|tact)[a-zA-Z0-9_]*\\b",
-        "action": "invalid.illegal.identifier.tact",
+        "action": "invalid.illegal.identifier",
       }],
       constant: [
         {
           "regex": "(?<=self\\.)(storageReserve)\\b",
-          "action": "constant.other.builtin.tact"
+          "action": "constant.other.builtin"
         },
         {
           "regex": "(?<!\\.)\\b(SendDefaultMode|SendRemainingValue|SendRemainingBalance|SendPayGasSeparately|SendPayFwdFeesSeparately|SendIgnoreErrors|SendBounceIfActionFail|SendDestroyIfZero|SendOnlyEstimateFee|ReserveExact|ReserveAllExcept|ReserveAtMost|ReserveAddOriginalBalance|ReserveInvertSign|ReserveBounceIfActionFail|TactExitCodeNullReferenceException|TactExitCodeInvalidSerializationPrefix|TactExitCodeInvalidIncomingMessage|TactExitCodeConstraintsError|TactExitCodeAccessDenied|TactExitCodeContractStopped|TactExitCodeInvalidArgument|TactExitCodeContractCodeNotFound|TactExitCodeInvalidStandardAddress|TactExitCodeNotBasechainAddress)\\b",
-          "action": "constant.other.builtin.tact"
+          "action": "constant.other.builtin"
         },
         {
           "regex": "\\b([A-Z]{2}[A-Z0-9_]*)\\b",
-          "action": "constant.other.caps.tact"
+          "action": "constant.other.caps"
         },
         {
           "regex": "(?<!\\.)\\b(const)\\s+([a-zA-Z_][A-Za-z0-9_]*)\\b",
-          "action": ["keyword.other.tact", "constant.other.declaration.tact"]
+          "action": ["keyword.other", "constant.other.declaration"]
         },
         {
           "regex": "(?<!\\.)\\b(null)\\b",
-          "action": "constant.language.null.tact"
+          "action": "constant.language.null"
         }
       ],
       type: [
@@ -177,7 +177,7 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         {
           "regex": "(?<!\\.)\\b(bounced|map|set)\\b",
           "action": {
-            "token": "type.identifier.tact",
+            "token": "type.identifier",
             "next": "@type_generic_start",
           },
         },
@@ -185,7 +185,7 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
       type_simple: [
         {
           "regex": "(?<!\\.)\\b([A-Z][a-zA-Z0-9_]*)(\\??)",
-          "action": ["type.identifier.tact", "keyword.operator.optional.tact"],
+          "action": ["type.identifier", "keyword.operator.optional"],
         },
         { "include": "@as" },
       ],
@@ -193,7 +193,7 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         {
           "regex": "<",
           "action": {
-            "token": "punctuation.brackets.angle.tact",
+            "token": "punctuation.brackets.angle",
             "bracket": "@open",
             "next": "@type_generic",
           },
@@ -208,12 +208,12 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         { "include": "@as" },
         {
           "regex": ",",
-          "action": "punctuation.comma.tact"
+          "action": "punctuation.comma"
         },
         {
           "regex": ">",
           "action": {
-            "token": "punctuation.brackets.angle.tact",
+            "token": "punctuation.brackets.angle",
             "bracket": "@close",
             "next": "@pop",
           },
@@ -223,8 +223,7 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
         {
           "regex": "(?<!\\.)\\b(as)\\b",
           "action": {
-            "token": "keyword.other.as.tact storage.modifier.tact",
-            // "next": "@as_tlb",
+            "token": "keyword.other.as.tact storage.modifier",
             "switchTo": "@as_tlb",
             // NOTE: switchTo makes a smaller chunk of the code lose colors
             // when there are any issues with the serialization format given
@@ -234,148 +233,148 @@ export default function tactMonarchLanguage(): monaco.languages.IMonarchLanguage
       as_tlb: [
         {
           "regex": "\\b(coins|varu?int(?:32|16)|remaining|bytes(?:32|64)|int257|u?int(?:25[0-6]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?))\\b",
-          "action": { "token": "type.identifier.tact", "next": "@pop", },
+          "action": { "token": "type.identifier", "switchTo": "@patterns" },
         },
       ],
       expression: [
         {
           "regex": "(\\|\\||&&|!!?)(?!=)",
-          "action": "keyword.operator.logical.tact"
+          "action": "keyword.operator.logical"
         },
         {
           "regex": "(\\^|&|\\||~|<<|>>)(?!=)",
-          "action": "keyword.operator.bitwise.tact"
+          "action": "keyword.operator.bitwise"
         },
         {
           "regex": "(\\+=|-=|\\*=|/=|%=|\\^=|&=|\\|=|\\|\\|=|&&=|<<=|>>=)",
-          "action": "keyword.operator.assignment.tact"
+          "action": "keyword.operator.assignment"
         },
         {
           "regex": "(?<![<>])=(?!=)",
-          "action": "keyword.operator.assignment.equal.tact"
+          "action": "keyword.operator.assignment.equal"
         },
         {
           "regex": "([!=]=|<=?|>=?)",
-          "action": "keyword.operator.comparison.tact"
+          "action": "keyword.operator.comparison"
         },
         {
           "regex": "([+%*\\-])|(/(?!/))",
-          "action": "keyword.operator.arithmetic.tact"
+          "action": "keyword.operator.arithmetic"
         },
         {
           "regex": "\\b(initOf)\\b",
-          "action": "keyword.operator.new.tact"
+          "action": "keyword.operator.new"
         },
         {
           "regex": "\\b(codeOf)\\b",
-          "action": "keyword.operator.new.tact"
+          "action": "keyword.operator.new"
         },
         {
           "regex": "(?!\\?\\.\\s*[^[:digit:]])(\\?)(?!\\?)",
-          "action": "keyword.operator.ternary.tact",
+          "action": "keyword.operator.ternary",
         },
       ],
       punctuation: [
         {
           "regex": ",",
-          "action": "punctuation.comma.tact"
+          "action": "punctuation.comma"
         },
         {
           "regex": "[{}]",
-          "action": "punctuation.brackets.curly.tact"
+          "action": "punctuation.brackets.curly"
         },
         {
           "regex": "[()]",
-          "action": "punctuation.brackets.round.tact"
+          "action": "punctuation.brackets.round"
         },
         {
           "regex": ";",
-          "action": "punctuation.semi.tact"
+          "action": "punctuation.semi"
         },
         {
           "regex": ":",
-          "action": "punctuation.colon.tact"
+          "action": "punctuation.colon"
         },
         {
           "regex": "\\.",
-          "action": "punctuation.dot.tact"
+          "action": "punctuation.dot"
         }
       ],
       keyword: [
         {
           "regex": "(?<!\\.)\\b(import)\\b",
-          "action": "keyword.control.import.tact"
+          "action": "keyword.control.import"
         },
         {
           "regex": "(?<=\\.\\.)\\b(else|catch|until|in(?!\\s*\\())\\b",
-          "action": "keyword.control.tact"
+          "action": "keyword.control"
         },
         {
           "regex": "(?<!\\.)\\b(if|else|try|catch|repeat|do|until|while|foreach|in(?!\\s*\\()|return)\\b",
-          "action": "keyword.control.tact"
+          "action": "keyword.control"
         },
         {
           "regex": "(?<!\\.)\\b(let|const)\\b",
-          "action": "keyword.other.tact"
+          "action": "keyword.other"
         },
         // NOTE: `as` keyword has its own rule: "@as"
         {
           "regex": "(?<!\\.)\\b(struct)\\b(?!\\s*:)",
-          "action": "keyword.other.struct.tact"
+          "action": "keyword.other.struct"
         },
         {
           "regex": "(?<!\\.)\\b(message)\\b(?!\\s*(?::|\\(\\s*M|\\(\\s*\\)))",
-          "action": "keyword.other.message.tact"
+          "action": "keyword.other.message"
         },
         {
           "regex": "(?<!\\.)\\b(trait)\\b(?!\\s*:)",
-          "action": "keyword.other.trait.tact"
+          "action": "keyword.other.trait"
         },
         {
           "regex": "(?<!\\.)\\b(contract)\\b(?!\\s*:)",
-          "action": "keyword.other.contract.tact"
+          "action": "keyword.other.contract"
         },
         {
           "regex": "(?<!\\.)\\b(abstract|virtual|override)\\b",
-          "action": "keyword.other.attribute.tact storage.modifier.tact"
+          "action": "keyword.other.attribute.tact storage.modifier"
         },
         {
           "regex": "(?<!\\.)\\b(extends|get|inline|mutates)\\b",
-          "action": "keyword.other.attribute.tact"
+          "action": "keyword.other.attribute"
         },
         {
           "regex": "(?<!\\.)\\b(fun|native)\\b",
-          "action": "keyword.other.function.tact"
+          "action": "keyword.other.function"
         },
         {
           "regex": "(?<!\\.)\\b(init|receive|bounced|external)(?=\\s*\\()",
-          "action": "keyword.other.function.tact"
+          "action": "keyword.other.function"
         },
         {
           "regex": "(?<!\\.)\\b(extend|public)\\b",
-          "action": "keyword.other.reserved.tact"
+          "action": "keyword.other.reserved"
         },
         {
           "regex": "(?<!\\.)\\b(primitive|with)\\b",
-          "action": "keyword.other.tact"
+          "action": "keyword.other"
         }
       ],
       function: [
         {
           "regex": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
-          "action": ["variable.tact", "punctuation.brackets.round.tact"],
-          // "entity.name.function.tact"
+          "action": ["variable", "punctuation.brackets.round"],
+          // "entity.name.function"
         }
       ],
       variable: [
         {
           "regex": "(?<!\\.)\\b(_)\\b",
-          "action": "comment.unused-identifier.tact"
+          "action": "comment.unused-identifier"
         },
         {
           "regex": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
-          "action": "nothing.tact"
-          // "variable.other.tact"
+          "action": "nothing"
+          // "variable.other"
         }
       ],
     },
