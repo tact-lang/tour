@@ -81,6 +81,8 @@ function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPanePro
     }
   };
 
+  const goContents = () => { };
+
   return (<>
     <section id="left" className="content-nav">
       <div>
@@ -96,7 +98,10 @@ function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPanePro
           {currentIndex === 0 ? 'Back' : 'Previous'}
         </button>
         <span>—</span>
-        <button className="nav-btn contents">
+        <button
+          onClick={goContents}
+          className="nav-btn contents"
+        >
           Contents ({currentIndex + 1}/{lessons.length})
         </button>
         <span>—</span>

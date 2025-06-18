@@ -126,20 +126,33 @@
   color: var(--text-muted);
   line-height: 1.6;
   margin-bottom: 1.25rem;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 .content-text p:last-child {
   margin-bottom: 0;
 }
 
+.content-text pre {
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  background: var(--code-bg);
+}
+
 .content-text code {
-  background-color: var(--code-bg);
   padding: 0.125rem 0.25rem;
-  border-radius: 3px;
-  font-family: "SF Mono", Monaco, Inconsolata, "Roboto Mono", monospace;
+  border-radius: 0.3rem;
+  font-family: "Fira Code", "SF Mono", Monaco, Inconsolata, "Roboto Mono", monospace;
   font-size: 0.875em;
   color: var(--text-color);
+  background: var(--code-bg);
+}
+
+.content-text pre>code {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  overflow: scroll;
 }
 
 /* Navigation */

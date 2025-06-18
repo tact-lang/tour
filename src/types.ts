@@ -42,11 +42,15 @@ export type Chapter0 = {
   last: Lesson;
 }
 
-// NOTE: Tact's VSCode might add support for Tact JS template literals.
-//       In the meantime, I'm using Helix that uses tree-sitter-X
-//       for arbitrary template literals of shape X`...`
 /** Template literal for highlighting Tact code within strings */
 export const tact = (strings: TemplateStringsArray, ...values: unknown[]): string => {
+  return strings.reduce((result, string, i) => {
+    return result + string + (values[i] || "");
+  }, "");
+};
+
+/** Template literal for highlighting TypeScript code within strings */
+export const ts = (strings: TemplateStringsArray, ...values: unknown[]): string => {
   return strings.reduce((result, string, i) => {
     return result + string + (values[i] || "");
   }, "");
