@@ -1,5 +1,6 @@
 import React from "react";
 import Editor from "@monaco-editor/react";
+import { useHotkeys } from "@mantine/hooks";
 import type { Lesson } from "./types";
 // import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
@@ -21,14 +22,13 @@ function App() {
   const themeState = localStorage.getItem('theme');
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [isDarkTheme, setIsDarkTheme] = React.useState(themeState === null || themeState === 'dark');
+  const currentExample = lessons[currentIndex];
 
   React.useEffect(() => {
     localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
     document.documentElement.classList.toggle('theme-dark', isDarkTheme);
     document.documentElement.classList.toggle('theme-light', !isDarkTheme);
   }, [isDarkTheme]);
-
-  const currentExample = lessons[currentIndex];
 
   return (
     <div className="App">
@@ -81,7 +81,13 @@ function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPanePro
     }
   };
 
+  // Modal?
   const goContents = () => { };
+
+  useHotkeys([
+    ['ArrowLeft', goPrevious],
+    ['ArrowRight', goNext],
+  ], ['div.monaco-editor']);
 
   return (<>
     <section id="left" className="content-nav">
@@ -95,7 +101,7 @@ function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPanePro
           disabled={currentIndex === 0}
           className="nav-btn"
         >
-          {currentIndex === 0 ? 'Back' : 'Previous'}
+          {currentIndex === 0 ? 'Start' : 'Previous'}
         </button>
         <span>—</span>
         <button
@@ -110,7 +116,7 @@ function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPanePro
           disabled={currentIndex === lessons.length - 1}
           className="nav-btn"
         >
-          {currentIndex === lessons.length - 1 ? 'End' : 'Next'}
+          {currentIndex === lessons.length - 1 ? 'Last' : 'Next'}
         </button>
       </nav>
     </section>
@@ -123,6 +129,21 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [output, _setOutput] = React.useState("(Soon) Save changes to re-compile and re-deploy...");
   const editorRef = React.useRef<any | null>(null);
+
+  // useHotkeys([
+  //   ['mod + S', () => console.log("Saved!")],
+  // ]);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        console.log('Saved through a callback');
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  });
 
   return (<>
     <section id="right">

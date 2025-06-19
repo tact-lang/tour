@@ -129,7 +129,7 @@
   font-size: 1rem;
 }
 
-.content-text p:last-child {
+.content-text>*:last-child {
   margin-bottom: 0;
 }
 
@@ -137,6 +137,7 @@
   padding: 0.5rem;
   border-radius: 0.3rem;
   background: var(--code-bg);
+  margin-bottom: 1.25rem;
 }
 
 .content-text code {

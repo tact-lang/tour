@@ -34,8 +34,8 @@ export type Chapter = {
 };
 
 /**
- * Special chapter that has the lesson displayed on the home/index page
- * and the lesson displayed the last
+ * Special chapter that has the lesson displayed on the home page
+ * and the lesson displayed on the last.
  */
 export type Chapter0 = {
   home: Lesson;

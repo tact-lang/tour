@@ -18,6 +18,7 @@ const home: Lesson = {
       code={ts`console.log(new Array(10).join(10 - "a") + " Batman!");`}
       lang="ts"
     />
+    <p>You can navigate through the tour with keyboard ⬅️ and ➡️.</p>
   </>,
   quiz: undefined,
   code: tact`contract HelloWorld() {

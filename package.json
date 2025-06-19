@@ -5,6 +5,7 @@
   "license": "MIT",
   "homepage": "https://tour.tact-lang.org",
   "dependencies": {
+    "@mantine/hooks": "^8.1.1",
     "@monaco-editor/react": "^4.7.0-rc.0",
     "@tact-lang/compiler": "^1.6.11",
     "@testing-library/dom": "^10.4.0",
