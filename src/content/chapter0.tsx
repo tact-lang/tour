@@ -15,7 +15,7 @@ const home: Lesson = {
       The tour is interactive! The code shown is editable and will be compiled and evaluated as you type. Anything you print using <code>dump()</code> will be shown in the bottom section, along with any compile errors and warnings.
     </p>
     <CodeBlock
-      code={ts`console.log(new Array(10).join(10 - "a") + " Batman!");`}
+      code={ts`console.log(new Array(10).join(10 - "a") + " Batman!"); // a lot more text here to check the scroll`}
       lang="ts"
     />
     <p>You can navigate through the tour with keyboard ⬅️ and ➡️.</p>

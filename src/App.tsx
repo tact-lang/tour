@@ -101,7 +101,7 @@ function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPanePro
           disabled={currentIndex === 0}
           className="nav-btn"
         >
-          {currentIndex === 0 ? 'Start' : 'Previous'}
+          {currentIndex === 0 ? 'Start' : '⬅️ Previous'}
         </button>
         <span>—</span>
         <button
@@ -116,7 +116,7 @@ function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPanePro
           disabled={currentIndex === lessons.length - 1}
           className="nav-btn"
         >
-          {currentIndex === lessons.length - 1 ? 'Last' : 'Next'}
+          {currentIndex === lessons.length - 1 ? 'Last' : 'Next ➡️'}
         </button>
       </nav>
     </section>
