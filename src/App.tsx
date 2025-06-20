@@ -10,11 +10,12 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 import "./App.css";
 import { type Lesson } from "./types";
-// import { compile } from "./compilation";
+import { OverwritableVirtualFileSystem, compile } from "./compilation";
 import tactMonarchDefinition from "./tactMonarchDefinition";
 import chapter0 from "./content/chapter0";
 import chapter1 from "./content/chapter1";
 
+const fs = new OverwritableVirtualFileSystem();
 const lessons: Lesson[] = [
   chapter0.home,
   ...(chapter1.lessons.flatMap((lesson) => {
@@ -141,13 +142,14 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
   const editorRef = React.useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   // Will be executed at most every one and a half seconds, even if it's called a lot.
-  const throttledCompileDeployLoop = useThrottledCallback(() => {
+  const throttledCompileDeployLoop = useThrottledCallback(async () => {
     if (!editorRef.current) return;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const _code = editorRef.current.getValue();
-    // TODO: write the file into fs, then run the compile()
-    // compile();
-    // console.log(_code);
+    const code = editorRef.current.getValue();
+    fs.writeFile("editor.tact", code);
+    const buildRes = await compile(fs);
+    // console.log(code);
+    console.log(buildRes);
   }, 1500);
 
   React.useEffect(() => {
