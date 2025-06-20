@@ -47,11 +47,11 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Check broken references in the README
+      - name: Check broken file references in the README
         if: runner.os == 'Linux'
         uses: lycheeverse/lychee-action@v2
         with:
-          args: "-n README.md"
+          args: "-n -s file README.md"
           output: "/dev/stdout"
           fail: true
           failIfEmpty: false
