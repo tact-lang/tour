@@ -19,6 +19,9 @@ const home: Lesson = {
 console.log(new Array(10).join(10 - "a") + " Batman!"); // a lot more text here to check the scroll`}
       lang="ts"
     />
+    <CodeBlock
+      code={tact`dump("Yay, Tact highlighting!");`}
+    />
     <p>
       You can navigate through the tour using keyboard arrows ⬅️ and ➡️ or by clicking the buttons below the content. Beware that the changes made to the code are lost in transitions!
     </p>

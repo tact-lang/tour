@@ -31,9 +31,8 @@ function App() {
     defaultValue: true,
   });
 
-  const foundIdx = lessons.findIndex((v) => v.url === hash.slice(1));
-  const currentIndex = foundIdx !== -1 ? foundIdx : 0;
-  console.log(foundIdx, currentIndex, lessons.at(foundIdx)?.url, hash);
+  const hashLessonIndex = lessons.findIndex((v) => v.url === hash.slice(1));
+  const currentIndex = hashLessonIndex !== -1 ? hashLessonIndex : 0;
   const currentExample = lessons[currentIndex];
 
   React.useEffect(() => {
@@ -83,14 +82,12 @@ function LeftPane({ currentExample, currentIndex, setHash }: LeftPaneProps) {
   const goNext = () => {
     if (currentIndex < lessons.length - 1) {
       setHash(lessons[currentIndex + 1].url);
-      // setCurrentIndex(currentIndex + 1);
     }
   };
 
   const goPrevious = () => {
     if (currentIndex > 0) {
       setHash(lessons[currentIndex - 1].url);
-      // setCurrentIndex(currentIndex - 1);
     }
   };
 
@@ -144,19 +141,20 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
   const editorRef = React.useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   // Will be executed at most every one and a half seconds, even if it's called a lot.
-  const throttledCallback = useThrottledCallback(() => {
+  const throttledCompileDeployLoop = useThrottledCallback(() => {
     if (!editorRef.current) return;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _code = editorRef.current.getValue();
     // TODO: write the file into fs, then run the compile()
     // compile();
+    // console.log(_code);
   }, 1500);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
-        throttledCallback();
+        throttledCompileDeployLoop();
       }
     };
     document.addEventListener('keydown', handleKeyDown);
@@ -186,7 +184,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
               editorRef.current = editor;
             }}
             onChange={(_value, _ev) => {
-              if (!editorRef.current) return;
+              throttledCompileDeployLoop();
             }}
           />
         </div>
