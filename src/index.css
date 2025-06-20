@@ -115,3 +115,11 @@ code {
   --output-bg: #24272f;
   --output-border: #545861;
 }
+
+html.theme-dark pre>code span {
+  color: var(--shiki-dark);
+}
+
+html.theme-light pre>code span {
+  color: var(--shiki-light);
+}

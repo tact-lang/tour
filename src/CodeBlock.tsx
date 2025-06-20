@@ -1,8 +1,21 @@
 import React from "react";
-import { type BundledLanguage, codeToHtml } from "shiki/dist/bundle-web.mjs";
+import {
+  type BundledLanguage,
+  bundledLanguages,
+  createHighlighter,
+} from "shiki/dist/bundle-web.mjs";
+import grammarTact from './tactTextMateDefinition.json';
 
-// TODO: should take the theme of the surrounding website into account.
-//       query the attributes on the <html> tag.
+const themeDark = 'one-dark-pro';
+const themeLight = 'one-light';
+const hl = createHighlighter({
+  themes: [themeDark, themeLight],
+  langs: [
+    bundledLanguages.javascript,
+    bundledLanguages.typescript,
+    grammarTact,
+  ],
+});
 
 type CodeBlockProps = {
   code: string;
@@ -14,10 +27,15 @@ export function CodeBlock({ code, lang = "tact" }: CodeBlockProps) {
 
   React.useLayoutEffect(() => {
     async function highlight() {
-      setHtml(await codeToHtml(code, {
+      const res = (await hl).codeToHtml(code.trim(), {
         lang,
-        theme: 'one-dark-pro',
-      }));
+        themes: {
+          dark: themeDark,
+          light: themeLight,
+        },
+        defaultColor: false,
+      });
+      setHtml(res);
     }
 
     highlight();
