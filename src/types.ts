@@ -1,7 +1,12 @@
 import { JSX } from "react";
 
 export type Lesson = {
-  /** Without a prefix or postfix slash / */
+  /**
+   * Without a prefix or a postfix slash /
+   * It will be automagically added as needed with
+   * an exception of Chapter0 lessons, where the `last`
+   * one requires it.
+   */
   url: string;
 
   /** <h1>{title}</h1> */

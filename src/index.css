@@ -115,8 +115,3 @@ code {
   --output-bg: #24272f;
   --output-border: #545861;
 }
-
-/* NOTE: tmp */
-a {
-  color: var(--accent-color);
-}

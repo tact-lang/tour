@@ -71,6 +71,8 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 - https://jgthms.com/javascript-in-14-minutes/
 - https://scrimba.com/learn-html-and-css-c0p?via=mdn
 - https://developer.mozilla.org/en-US/docs/Learn_web_development/Core
+- https://ocaml.org/docs/tour-of-ocaml
+- https://cssbattle.dev/learn/demo/1
 
 ## License
 

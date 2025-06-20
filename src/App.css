@@ -158,6 +158,18 @@
   background: none;
 }
 
+.content-text ul {
+  list-style: none;
+}
+
+.content-text ul>li {
+  padding: 4px 12px;
+}
+
+.content-text a {
+  color: var(--accent-color);
+}
+
 /* Navigation */
 
 .prev-next {

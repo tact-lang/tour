@@ -1,10 +1,15 @@
 import React from "react";
 import Editor from "@monaco-editor/react";
-import { useHotkeys } from "@mantine/hooks";
-import type { Lesson } from "./types";
+import {
+  useHash,
+  useHotkeys,
+  useLocalStorage,
+  useThrottledCallback,
+} from "@mantine/hooks";
 // import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 import "./App.css";
+import { type Lesson } from "./types";
 import tactMonarchDefinition from "./tactMonarchDefinition";
 import chapter0 from "./content/chapter0";
 import chapter1 from "./content/chapter1";
@@ -12,20 +17,25 @@ import chapter1 from "./content/chapter1";
 const lessons: Lesson[] = [
   chapter0.home,
   ...(chapter1.lessons.flatMap((lesson) => {
-    lesson.url = chapter1.url + "/" + lesson.url;
+    lesson.url = "/" + chapter1.url.replaceAll('/', '') + "/" + lesson.url.replaceAll('/', '');
     return lesson;
   })),
   chapter0.last,
 ];
 
 function App() {
-  const themeState = localStorage.getItem('theme');
-  const [currentIndex, setCurrentIndex] = React.useState(0);
-  const [isDarkTheme, setIsDarkTheme] = React.useState(themeState === null || themeState === 'dark');
+  const [hash, setHash] = useHash();
+  const [isDarkTheme, setIsDarkTheme] = useLocalStorage<boolean>({
+    key: 'theme',
+    defaultValue: true,
+  });
+
+  const foundIdx = lessons.findIndex((v) => v.url === hash.slice(1));
+  const currentIndex = foundIdx !== -1 ? foundIdx : 0;
+  console.log(foundIdx, currentIndex, lessons.at(foundIdx)?.url, hash);
   const currentExample = lessons[currentIndex];
 
   React.useEffect(() => {
-    localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
     document.documentElement.classList.toggle('theme-dark', isDarkTheme);
     document.documentElement.classList.toggle('theme-light', !isDarkTheme);
   }, [isDarkTheme]);
@@ -55,7 +65,7 @@ function App() {
       </nav>
 
       <article id="playground">
-        <LeftPane currentExample={currentExample} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+        <LeftPane currentExample={currentExample} currentIndex={currentIndex} setHash={setHash} />
         <RightPane defaultContent={currentExample.code} isDarkTheme={isDarkTheme} />
       </article>
     </div>
@@ -65,19 +75,21 @@ function App() {
 type LeftPaneProps = {
   currentExample: Lesson;
   currentIndex: number;
-  setCurrentIndex: (value: number) => void;
+  setHash: (value: string) => void;
 };
 
-function LeftPane({ currentExample, currentIndex, setCurrentIndex }: LeftPaneProps) {
+function LeftPane({ currentExample, currentIndex, setHash }: LeftPaneProps) {
   const goNext = () => {
     if (currentIndex < lessons.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+      setHash(lessons[currentIndex + 1].url);
+      // setCurrentIndex(currentIndex + 1);
     }
   };
 
   const goPrevious = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+      setHash(lessons[currentIndex - 1].url);
+      // setCurrentIndex(currentIndex - 1);
     }
   };
 
@@ -130,17 +142,16 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
   const [output, _setOutput] = React.useState("(Soon) Save changes to re-compile and re-deploy...");
   const editorRef = React.useRef<any | null>(null);
 
-  // useHotkeys([
-  //   ['mod + S', () => console.log("Saved!")],
-  // ]);
+  // Will be executed at most every second, even if it's called a lot.
+  const throttledCallback = useThrottledCallback(() => console.log('Saved through a callback'), 1000);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
-        console.log('Saved through a callback');
+        throttledCallback();
       }
-    }
+    };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   });

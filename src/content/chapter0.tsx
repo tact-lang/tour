@@ -15,10 +15,13 @@ const home: Lesson = {
       The tour is interactive! The code shown is editable and will be compiled and evaluated as you type. Anything you print using <code>dump()</code> will be shown in the bottom section, along with any compile errors and warnings.
     </p>
     <CodeBlock
-      code={ts`console.log(new Array(10).join(10 - "a") + " Batman!"); // a lot more text here to check the scroll`}
+      code={ts`// WIP: This is here to test highlighting & friends
+console.log(new Array(10).join(10 - "a") + " Batman!"); // a lot more text here to check the scroll`}
       lang="ts"
     />
-    <p>You can navigate through the tour with keyboard ⬅️ and ➡️.</p>
+    <p>
+      You can navigate through the tour using keyboard arrows ⬅️ and ➡️ or by clicking the buttons below the content. Beware that the changes made to the code are lost in transitions!
+    </p>
   </>,
   quiz: undefined,
   code: tact`contract HelloWorld() {
@@ -31,21 +34,21 @@ const home: Lesson = {
 };
 
 const last: Lesson = {
-  url: "what-next",
+  url: "/what-next",
   title: "What next? ✨",
   content: (<>
     <p>
-      It's been a joy to have you on the Tour of Tact. Tact and TON Studio teams sincerely hope you enjoy the journey ahead! If you have felt comfortable this far, we strongly recommend diving deeper with these resources:
+      It's been a joy to have you on the Tour of Tact. TON Studio and Tact teams sincerely hope you enjoy the journey ahead. If you have felt comfortable this far, we strongly recommend diving deeper with these resources:
     </p>
-    {/* <p>
-      Congratulations on completing the tour! Here are some ideas for what to do next:
-    </p> */}
     <ul>
       <li><a href="https://docs.tact-lang.org">Official Tact documentation</a></li>
       <li><a href="https://github.com/tact-lang/awesome-tact">Awesome Tact</a></li>
       <li><a href="https://github.com/tact-lang/defi-cookbook">Tact DeFi Cookbook</a></li>
       <li><a href="https://github.com/tact-lang/tact#installation">Installation and local tooling setup</a></li>
     </ul>
+    <p>
+      Good luck on your coding adventure — let's write some ⚡ Tact!
+    </p>
   </>),
   quiz: undefined,
   code: "// This is your personal playground, enjoy!",
