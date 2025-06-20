@@ -8,13 +8,12 @@ export const lesson: Lesson = {
       An optional is a value than can be of any type or <code>null</code>. Null is a special value that represents the intentional absence of any other value.
     </p>
     <p>
-      You can make almost any variable or field optional by adding a question mark (?) after its type name. The only exceptions are <code>{"map<K, V>"}</code> and <code>{"bounced<Message>"}</code>, in which you cannot make the inner key/value type (in the case of a map) or the inner message struct (in the case of a bounced) optional.
+      You can make almost any variable or field optional by adding a question mark <code>?</code> after its type name. The only exceptions are <code>{"map<K, V>"}</code> and <code>{"bounced<Message>"}</code>, in which you cannot make the inner key/value type (in the case of a map) or the inner message struct (in the case of a bounced) optional.
     </p>
   </>,
   quiz: undefined,
   code: tact`contract Optionals() {
     get fun showcase() {
-        // Int keys to Int values.
         // Type ascription of optionals is mandatory.
         let optionalVal: Int? = null;
         optionalVal = 255;

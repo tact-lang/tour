@@ -3,12 +3,13 @@ import { type Lesson, tact } from "../../types";
 export const lesson: Lesson = {
   url: "integers",
   title: "Integers",
-  content: <>There are two main groups of primitive types in Tact: integers and cells. All other primitive types are derivatives of those two.</>,
+  content: <>
+    <p>
+      <code>Int</code> is a 257-bit signed integer, which can have smaller bit-length in persistent contract's state (storage).
+    </p>
+  </>,
   quiz: undefined,
-  code: tact`// Integers are always 257-bit signed in runtime operations,
-// but may have different lengths in persistent contract's state (storage).
-
-contract Integers() {
+  code: tact`contract Integers() {
     get fun showcase() {
         let one_plus_one: Int = 1 + 1; // 2
         let two_by_two: Int = 2 / 2;   // 1

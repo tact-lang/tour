@@ -16,7 +16,7 @@ export const lesson: Lesson = {
     get fun showcase() {
         // String literals are wrapped in double-quotes and can contain escape sequences,
         // but they intentionally cannot be concatenated via any operators.
-        let str: String = "I am a string literal, 👻!"; // see the "Expressions" section for more
+        let str: String = "I am a string literal, 👻!";
 
         // Strings are useful for storing text,
         // so they can be converted to a Cell type to be used as message bodies.

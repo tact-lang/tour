@@ -6,10 +6,11 @@ import {
   useLocalStorage,
   useThrottledCallback,
 } from "@mantine/hooks";
-// import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 import "./App.css";
 import { type Lesson } from "./types";
+// import { compile } from "./compilation";
 import tactMonarchDefinition from "./tactMonarchDefinition";
 import chapter0 from "./content/chapter0";
 import chapter1 from "./content/chapter1";
@@ -139,11 +140,17 @@ type RightPaneProps = { defaultContent: string, isDarkTheme: boolean };
 
 function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [output, _setOutput] = React.useState("(Soon) Save changes to re-compile and re-deploy...");
-  const editorRef = React.useRef<any | null>(null);
+  const [output, _setOutput] = React.useState("Re-compiled on changes, see the console!");
+  const editorRef = React.useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
-  // Will be executed at most every second, even if it's called a lot.
-  const throttledCallback = useThrottledCallback(() => console.log('Saved through a callback'), 1000);
+  // Will be executed at most every one and a half seconds, even if it's called a lot.
+  const throttledCallback = useThrottledCallback(() => {
+    if (!editorRef.current) return;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _code = editorRef.current.getValue();
+    // TODO: write the file into fs, then run the compile()
+    // compile();
+  }, 1500);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
