@@ -10,7 +10,7 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 import "./App.css";
 import { type Lesson } from "./types";
-import { OverwritableVirtualFileSystem, compile } from "./compilation";
+import { type SrcInfo, OverwritableVirtualFileSystem, compile } from "./compilation";
 import tactMonarchDefinition from "./tactMonarchDefinition";
 import chapter0 from "./content/chapter0";
 import chapter1 from "./content/chapter1";
@@ -137,19 +137,58 @@ function LeftPane({ currentExample, currentIndex, setHash }: LeftPaneProps) {
 type RightPaneProps = { defaultContent: string, isDarkTheme: boolean };
 
 function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [output, _setOutput] = React.useState("Re-compiled on changes, see the console!");
+  const [output, setOutput] = React.useState("Use Ctrl/Cmd+S to compile and deploy!");
   const editorRef = React.useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const monacoRef = React.useRef<typeof monaco>(null);
 
   // Will be executed at most every one and a half seconds, even if it's called a lot.
   const throttledCompileDeployLoop = useThrottledCallback(async () => {
     if (!editorRef.current) return;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const code = editorRef.current.getValue();
+    if (!monacoRef.current) return;
+
+    const model = editorRef.current.getModel();
+    const code = editorRef.current.getValue(); // model.getValue();
+    if (!model) return;
     fs.writeFile("editor.tact", code);
     const buildRes = await compile(fs);
-    // console.log(code);
-    console.log(buildRes);
+    if (buildRes.ok) {
+      monacoRef.current.editor.setModelMarkers(model, 'default', []);
+      setOutput("Compiled without errors!");
+      return;
+    }
+
+    // console.log(buildRes);
+    setOutput("Fix errors and press Ctrl/Cmd+S to recompile.");
+    monacoRef.current.editor.setModelMarkers(model, 'default', buildRes.error.map((v) => {
+      const msgStart = v.message.indexOf(' ') + 1;
+      const msgEnd = v.message.indexOf('\n');
+      const msg = v.message.slice(
+        msgStart !== -1 ? msgStart : 0,
+        msgEnd !== -1 ? msgEnd : undefined,
+      ) + `\n\nCompiled with Tact ${buildRes.version}`;
+
+      const loc: SrcInfo | null = (v as any).loc;
+      if (!loc) {
+        return {
+          startLineNumber: 2,
+          endLineNumber: 0,
+          startColumn: 0,
+          endColumn: 0,
+          severity: monaco.MarkerSeverity.Error,
+          message: msg,
+        };
+      }
+
+      const lac = loc.interval.getLineAndColumn();
+      return {
+        startLineNumber: lac.lineNum,
+        endLineNumber: lac.lineNum,
+        startColumn: lac.colNum,
+        endColumn: lac.colNum,
+        severity: monaco.MarkerSeverity.Error,
+        message: msg,
+      };
+    }));
   }, 1500);
 
   React.useEffect(() => {
@@ -168,6 +207,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
       <section id="editor">
         <div className="editor-content">
           {/* NOTE: Web IDE usage: https://github.com/tact-lang/web-ide/blob/main/src/components/workspace/Editor/Editor.tsx */}
+          {/* NOTE: TxTracer usage: https://github.com/tact-lang/TxTracer/tree/main/src/shared/ui/CodeEditor */}
           <Editor
             defaultLanguage="tact"
             defaultValue={undefined}
@@ -182,11 +222,17 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
               monaco.languages.register({ id: "tact" });
               monaco.languages.setMonarchTokensProvider("tact", tactMonarchDefinition());
             }}
-            onMount={(editor, _monaco) => {
+            onMount={(editor, monaco) => {
               editorRef.current = editor;
+              monacoRef.current = monaco;
             }}
             onChange={(_value, _ev) => {
-              throttledCompileDeployLoop();
+              // if (!editorRef.current) return;
+              // if (!monacoRef.current) return;
+              // const model = editorRef.current.getModel();
+              // if (!model) return;
+              // monacoRef.current.editor.setModelMarkers(model, 'default', []);
+              // throttledCompileDeployLoop();
             }}
           />
         </div>

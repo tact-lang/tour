@@ -152,3 +152,5 @@ export type CompileResult = {
   files: Map<string, Buffer>;
   projectConfig: Project;
 };
+
+export type { SrcInfo } from '@tact-lang/compiler';
