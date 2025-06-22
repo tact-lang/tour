@@ -122,7 +122,7 @@ export class OverwritableVirtualFileSystem implements VirtualFileSystem {
   }
 
   private normalizePath(path: string): string {
-    const res = path.trim().replaceAll(/\/{2,}/, '/');
+    const res = path.trim().replace(/\/{2,}/g, '/');
     if (res === sep) {
       return res;
     } else {

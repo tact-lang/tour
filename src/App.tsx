@@ -19,7 +19,7 @@ const fs = new OverwritableVirtualFileSystem();
 const lessons: Lesson[] = [
   chapter0.home,
   ...(chapter1.lessons.flatMap((lesson) => {
-    lesson.url = "/" + chapter1.url.replaceAll('/', '') + "/" + lesson.url.replaceAll('/', '');
+    lesson.url = "/" + chapter1.url.replace(/\//g, '') + "/" + lesson.url.replace(/\//g, '');
     return lesson;
   })),
   chapter0.last,
