@@ -4,20 +4,16 @@ import {
   build,
   createVirtualFileSystem,
   stdLibFiles,
+  Logger,
   type VirtualFileSystem,
   type Config,
-  // type Options,
   type Project,
   type BuildResult,
-  dummySrcInfo,
 } from "@tact-lang/compiler";
-import packageJson from '../package.json';
+import tactPackageJson from '../node_modules/@tact-lang/compiler/package.json';
 
 // Direct dependency of the Tact compiler
 import { Cell } from "@ton/core";
-
-// TODO: fix compilation.
-//       In the meantime, add types page and remove redundant stuff on the first one.
 
 export async function compile(
   fs: OverwritableVirtualFileSystem,
@@ -30,23 +26,16 @@ export async function compile(
       path: "editor.tact",
     }],
   };
+  const logger = new Logger(0);
   const buildConfig = {
     config: tactConfig.projects[0],
     stdlib: createVirtualFileSystem('@stdlib', stdLibFiles),
     project: fs,
+    logger: logger,
   };
 
-  const tactVersion = packageJson.version;
-  // TODO: custom build() function? Akin to Web IDE?
-  // const res = await build(buildConfig);
-  const res: BuildResult = {
-    ok: false,
-    error: [{
-      name: "Idk",
-      message: "Bad",
-      loc: dummySrcInfo,
-    }],
-  };
+  const tactVersion = tactPackageJson.version;
+  const res = await build(buildConfig);
 
   if (res.ok === false) {
     return {
