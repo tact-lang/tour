@@ -1,37 +1,40 @@
-import { resolve, normalize, sep } from "path";
-import { existsSync, readFileSync } from "fs";
-
 import {
   // precompile,
   // run,
   build,
   createVirtualFileSystem,
   stdLibFiles,
+  Logger,
   type VirtualFileSystem,
   type Config,
-  // type Options,
   type Project,
   type BuildResult,
 } from "@tact-lang/compiler";
+import tactPackageJson from '../node_modules/@tact-lang/compiler/package.json';
 
 // Direct dependency of the Tact compiler
 import { Cell } from "@ton/core";
 
 export async function compile(
-  tactConfig: Config,
-  projectName: string,
+  fs: OverwritableVirtualFileSystem,
 ): Promise<CompileResult> {
-  const fs = new OverwritableVirtualFileSystem('.');
-  // const fs = createVirtualFileSystem('/', {}, false);
-  // fs.writeFile();
-
+  const projectName = "editor";
+  const tactConfig: Config = {
+    projects: [{
+      name: projectName,
+      output: "output",
+      path: "editor.tact",
+    }],
+  };
+  const logger = new Logger(0);
   const buildConfig = {
-    config: extractProjectConfig(tactConfig, projectName),
+    config: tactConfig.projects[0],
     stdlib: createVirtualFileSystem('@stdlib', stdLibFiles),
     project: fs,
+    logger: logger,
   };
 
-  const tactVersion = await getTactVersion();
+  const tactVersion = tactPackageJson.version;
   const res = await build(buildConfig);
 
   if (res.ok === false) {
@@ -53,16 +56,10 @@ export async function compile(
   };
 }
 
-async function getTactVersion() {
-  const packageJsonPath = require.resolve('@tact-lang/compiler/package.json');
-  const { version } = await import(packageJsonPath);
-  return version;
-}
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function _findTactBoc(fs: Map<string, Buffer>): Cell {
   let buf: Buffer | undefined = undefined;
-  for (const [k, v] of fs) {
+  for (const [k, v] of fs.entries()) {
     if (k.endsWith('.code.boc')) {
       buf = v;
       break;
@@ -74,7 +71,8 @@ function _findTactBoc(fs: Map<string, Buffer>): Cell {
   return Cell.fromBoc(buf)[0];
 }
 
-function extractProjectConfig(tactConfig: Config, projectName: string): Project {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function _extractProjectConfig(tactConfig: Config, projectName: string): Project {
   const project = tactConfig.projects.find((p) => p.name === projectName);
 
   if (!project) {
@@ -84,31 +82,63 @@ function extractProjectConfig(tactConfig: Config, projectName: string): Project 
   return project;
 }
 
+const sep = '/';
 export class OverwritableVirtualFileSystem implements VirtualFileSystem {
   root: string;
   files: Map<string, Buffer> = new Map();
 
-  constructor(root: string) {
-    this.root = normalize(root);
-    if (!this.root.endsWith(sep)) {
-      this.root += sep;
-    }
+  constructor(root: string = sep) {
+    this.root = this.normalizePath(root);
   }
 
   resolve(...path: string[]): string {
-    return normalize(resolve(this.root, ...path));
+    return this.normalizePath(this.resolvePath(this.root, ...path));
   }
 
   exists(path: string): boolean {
-    return existsSync(path);
+    return this.files.has(this.resolve(path));
   }
 
   readFile(path: string): Buffer {
-    return this.files.get(path) ?? readFileSync(path);
+    const resolvedPath = this.resolve(path);
+    return this.files.get(resolvedPath) ?? Buffer.from('');
   }
 
   writeFile(path: string, content: string | Buffer): void {
-    this.files.set(path, typeof content === 'string' ? Buffer.from(content, 'utf-8') : content);
+    const resolvedPath = this.resolve(path);
+    const buffer = typeof content === 'string' ? Buffer.from(content, 'utf-8') : content;
+    this.files.set(resolvedPath, buffer);
+  }
+
+  private normalizePath(path: string): string {
+    const res = path.trim().replace(/\/{2,}/g, '/');
+    if (res === sep) {
+      return res;
+    } else {
+      return res.replace(RegExp(sep + '+$'), '');
+    }
+  }
+
+  private resolvePath(...pathSegments: string[]): string {
+    const pathParts = this.root.split('/');
+    for (const segment of pathSegments) {
+      const normalizedSegment = this.normalizePath(segment);
+      const parts = normalizedSegment.split('/');
+
+      for (const part of parts) {
+        if (part === '..') {
+          // Go up one directory level
+          if (pathParts.length > 0) {
+            pathParts.pop();
+          }
+        } else if (part !== '.' && part !== '') {
+          // Navigate down to the directory
+          pathParts.push(part);
+        }
+        // Ignore '.' and empty segments as they represent the current directory
+      }
+    }
+    return pathParts.join('/');
   }
 }
 
@@ -122,3 +152,5 @@ export type CompileResult = {
   files: Map<string, Buffer>;
   projectConfig: Project;
 };
+
+export type { SrcInfo } from '@tact-lang/compiler';

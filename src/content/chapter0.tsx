@@ -23,7 +23,7 @@ console.log(new Array(10).join(10 - "a") + " Batman!"); // a lot more text here 
       code={tact`dump("Yay, Tact highlighting!");`}
     />
     <p>
-      You can navigate through the tour using keyboard arrows ⬅️ and ➡️ or by clicking the buttons below the content. Beware that the changes made to the code are lost in transitions!
+      You can navigate through the tour using keyboard arrows ⬅️ and ➡️ or by clicking the buttons below the content. To compile and deploy, press Cmd+S on macOS and Ctrl+S on other systems. Beware that the changes made to the code are lost in transitions!
     </p>
   </>,
   quiz: undefined,

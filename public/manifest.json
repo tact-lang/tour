@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Tact Tour",
+  "name": "Learn Tact in your browser with an interactive tour.",
   "icons": [
     {
       "src": "favicon.ico",

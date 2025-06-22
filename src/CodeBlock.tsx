@@ -6,8 +6,8 @@ import {
 } from "shiki/dist/bundle-web.mjs";
 import grammarTact from './tactTextMateDefinition.json';
 
-const themeDark = 'one-dark-pro';
-const themeLight = 'one-light';
+const themeDark = 'dark-plus';
+const themeLight = 'light-plus';
 const hl = createHighlighter({
   themes: [themeDark, themeLight],
   langs: [
