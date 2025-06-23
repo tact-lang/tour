@@ -1,13 +1,14 @@
 import React from "react";
 import {
   type BundledLanguage,
+  type BundledTheme,
   bundledLanguages,
   createHighlighter,
 } from "shiki/dist/bundle-web.mjs";
 import grammarTact from './tactTextMateDefinition.json';
 
-const themeDark = 'dark-plus';
-const themeLight = 'light-plus';
+const themeDark: BundledTheme = 'one-dark-pro';
+const themeLight: BundledTheme = 'one-light';
 const hl = createHighlighter({
   themes: [themeDark, themeLight],
   langs: [
