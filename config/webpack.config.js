@@ -416,7 +416,10 @@ module.exports = function(webpackEnv) {
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: paths.appSrc,
+              include: [
+                paths.appSrc,
+                paths.nmTactOpcode, // NOTE: transpile @tact-lang/opcode too!
+              ],
               loader: require.resolve('babel-loader'),
               options: {
                 customize: require.resolve(
