@@ -4,10 +4,18 @@
   "private": true,
   "license": "MIT",
   "homepage": "https://tour.tact-lang.org",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js",
+    "serve": "node scripts/build.js && serve -s build"
+  },
   "dependencies": {
     "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-class-static-block": "^7.27.1",
     "@mantine/hooks": "^8.1.1",
     "@monaco-editor/react": "^4.7.0-rc.0",
+    "@peculiar/webcrypto": "^1.5.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",
     "@tact-lang/compiler": "^1.6.11",
@@ -41,12 +49,12 @@
     "fs-extra": "^10.0.0",
     "html-webpack-plugin": "^5.5.0",
     "identity-obj-proxy": "^3.0.0",
+    "isomorphic-webcrypto": "^2.3.8",
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
     "mini-css-extract-plugin": "^2.4.5",
     "monaco-editor": "^0.52.2",
-    "monaco-editor-webpack-plugin": "^7.1.0",
     "path-browserify": "1.0.1",
     "postcss": "^8.4.4",
     "postcss-flexbugs-fixes": "^5.0.2",
@@ -76,10 +84,8 @@
     "webpack-manifest-plugin": "^4.0.2",
     "workbox-webpack-plugin": "^6.4.1"
   },
-  "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+  "devDependencies": {
+    "serve": "^14.2.4"
   },
   "eslintConfig": {
     "extends": [
@@ -125,7 +131,7 @@
       "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
+      "[/\\\\]node_modules[/\\\\](?!(?:monaco-editor)[/\\\\]).+\\.(js|jsx|mjs|cjs|ts|tsx)$",
       "^.+\\.module\\.(css|sass|scss)$"
     ],
     "modulePaths": [],

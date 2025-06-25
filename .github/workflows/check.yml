@@ -60,3 +60,6 @@ jobs:
 
       - name: Build the site
         run: yarn build
+
+      - name: Run tests
+        run: yarn test
