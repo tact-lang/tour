@@ -14,9 +14,9 @@ if (!window.crypto || !window.crypto.subtle) {
 }
 
 // FIXME Attempts at polyfilling the crypto for http-only env
-console.log(
-  window.crypto.subtle.digest('SHA-256', new Buffer([]))
-);
+// console.log(
+//   window.crypto.subtle.digest('SHA-256', new Buffer([]))
+// );
 
 const root = ReactDOM.createRoot(
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion

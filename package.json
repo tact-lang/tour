@@ -7,12 +7,11 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules node scripts/test.js",
     "serve": "node scripts/build.js && serve -s build"
   },
   "dependencies": {
     "@babel/core": "^7.16.0",
-    "@babel/plugin-transform-class-static-block": "^7.27.1",
     "@mantine/hooks": "^8.1.1",
     "@monaco-editor/react": "^4.7.0-rc.0",
     "@peculiar/webcrypto": "^1.5.0",
@@ -85,6 +84,7 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "serve": "^14.2.4"
   },
   "eslintConfig": {
@@ -131,7 +131,7 @@
       "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\](?!(?:monaco-editor)[/\\\\]).+\\.(js|jsx|mjs|cjs|ts|tsx)$",
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
       "^.+\\.module\\.(css|sass|scss)$"
     ],
     "modulePaths": [],
