@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules node scripts/test.js",
+    "test": "node --experimental-vm-modules scripts/test.js",
     "serve": "node scripts/build.js && serve -s build"
   },
   "dependencies": {
@@ -137,7 +137,8 @@
     "modulePaths": [],
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
+      "^ipfs-unixfs-importer$": "<rootDir>/src/__mocks__/ipfs-unixfx-importer"
     },
     "moduleFileExtensions": [
       "web.js",
@@ -155,7 +156,12 @@
       "jest-watch-typeahead/filename",
       "jest-watch-typeahead/testname"
     ],
-    "resetMocks": true
+    "resetMocks": true,
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    }
   },
   "babel": {
     "presets": [
