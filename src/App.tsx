@@ -6,7 +6,7 @@ import {
   useLocalStorage,
   useThrottledCallback,
 } from "@mantine/hooks";
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import type monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 import "./App.css";
 import { type Lesson } from "./types";
@@ -174,7 +174,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
           endLineNumber: 0,
           startColumn: 0,
           endColumn: 0,
-          severity: monaco.MarkerSeverity.Error,
+          severity: 8,
           message: msg,
         };
       }
@@ -185,7 +185,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
         endLineNumber: lac.lineNum,
         startColumn: lac.colNum,
         endColumn: lac.colNum,
-        severity: monaco.MarkerSeverity.Error,
+        severity: 8,
         message: msg,
       };
     }));

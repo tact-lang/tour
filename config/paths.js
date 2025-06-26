@@ -63,6 +63,7 @@ module.exports = {
   appTsConfig: resolveApp('tsconfig.json'),
   appJsConfig: resolveApp('jsconfig.json'),
   nmTactOpcode: resolveApp('node_modules/@tact-lang/opcode'),
+  nmMonacoEditor: resolveApp('node_modules/monaco-editor'),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
   proxySetup: resolveApp('src/setupProxy.js'),
