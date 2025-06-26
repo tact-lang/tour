@@ -17,7 +17,6 @@
     "@babel/core": "^7.16.0",
     "@mantine/hooks": "^8.1.1",
     "@monaco-editor/react": "^4.7.0-rc.0",
-    "@peculiar/webcrypto": "^1.5.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",
     "@tact-lang/compiler": "^1.6.11",
@@ -49,7 +48,6 @@
     "fs-extra": "^10.0.0",
     "html-webpack-plugin": "^5.5.0",
     "identity-obj-proxy": "^3.0.0",
-    "isomorphic-webcrypto": "^2.3.8",
     "mini-css-extract-plugin": "^2.4.5",
     "monaco-editor": "^0.52.2",
     "path-browserify": "1.0.1",
@@ -82,12 +80,12 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "devDependencies": {
-    "@vitest/ui": "^3.1.4",
+    "@vitest/ui": "3.1.4",
     "cross-env": "^7.0.3",
     "eslint-plugin-vitest": "^0.5.4",
     "jsdom": "^26.1.0",
     "serve": "^14.2.4",
-    "vitest": "^3.1.4"
+    "vitest": "3.1.4"
   },
   "eslintConfig": {
     "extends": [
