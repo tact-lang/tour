@@ -23,20 +23,29 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: var(--text-color);
-  font-size: 1.25rem;
-  font-weight: 600;
   transition: color 0.2s ease;
 }
 
-.logo:hover {
-  color: var(--accent-color);
+.logo-icon {
+  height: 23px;
+  width: 109px;
+  transition: opacity 0.2s ease;
 }
 
-.logo-icon {
-  font-size: 1.5rem;
+html.theme-light .logo-light {
+  display: block;
+}
+
+html.theme-light .logo-dark {
+  display: none;
+}
+
+html.theme-dark .logo-light {
+  display: none;
+}
+
+html.theme-dark .logo-dark {
+  display: block;
 }
 
 .nav-right {
