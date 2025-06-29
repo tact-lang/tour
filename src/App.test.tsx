@@ -15,8 +15,10 @@ async function waitSeconds(seconds: number = 2) {
 
 test('renders title', () => {
   render(<App />);
-  const titleElement = screen.getByText(/Tact Tour/i);
-  expect(titleElement).toBeInTheDocument();
+  const logoElements = screen.getAllByAltText(/Tact Tour/i);
+  expect(logoElements).toHaveLength(2);
+  expect(logoElements[0]).toBeInTheDocument();
+  expect(logoElements[1]).toBeInTheDocument();
 });
 
 test('compiles Tact code on the starting page', async () => {

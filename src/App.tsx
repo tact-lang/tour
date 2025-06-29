@@ -45,8 +45,16 @@ function App() {
     <div className="App">
       <nav className="navbar">
         <a href="/" className="logo">
-          <span className="logo-icon">⚡</span>
-          Tact Tour
+          <img
+            src="/logo-light.svg"
+            alt="Tact Tour"
+            className="logo-icon logo-light"
+          />
+          <img
+            src="/logo-dark.svg"
+            alt="Tact Tour"
+            className="logo-icon logo-dark"
+          />
         </a>
         <div className="nav-right">
           <a href="https://docs.tact-lang.org" className="link" target="_blank" rel="noopener noreferrer">
