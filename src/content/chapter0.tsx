@@ -1,9 +1,9 @@
-import { type Chapter0, type Lesson, tact, ts } from "../types";
-import { CodeBlock } from "../CodeBlock";
+import { type Chapter0, type Lesson, tact } from "../types";
+// import { CodeBlock } from "../CodeBlock";
 
 const home: Lesson = {
   url: "",
-  title: "Welcome to the Tact language tour! WIP, come back later!",
+  title: "Welcome to the Tact language tour! 💫",
   content: <>
     <p>
       Tact is a statically typed language designed specifically for TON blockchain smart contracts. It provides safety, efficiency, and ease of use while maintaining the power needed for complex smart contract development.
@@ -14,16 +14,19 @@ const home: Lesson = {
     <p>
       The tour is interactive! The code shown is editable and will be compiled and evaluated as you type. Anything you print using <code>dump()</code> will be shown in the bottom section, along with any compile errors and warnings.
     </p>
-    <CodeBlock
+    {/* <CodeBlock
       code={ts`// WIP: This is here to test highlighting & friends
 console.log(new Array(10).join(10 - "a") + " Batman!"); // a lot more text here to check the scroll`}
       lang="ts"
     />
     <CodeBlock
       code={tact`dump("Yay, Tact highlighting!");`}
-    />
+    /> */}
     <p>
-      You can navigate through the tour using keyboard arrows ⬅️ and ➡️ or by clicking the buttons below the content. To compile and deploy, press Cmd+S on macOS and Ctrl+S on other systems. Beware that the changes made to the code are lost in transitions!
+      You can navigate through the tour using keyboard arrows ⬅️ and ➡️ to move between lessons or ⬆️ and ⬇️  to open and close the list of contents. Additionally, you can simply click the relevant buttons below the content.
+    </p>
+    <p>
+      To compile and deploy, press <code>Cmd+S</code> on macOS and <code>Ctrl+S</code> on other systems. Beware that the changes made to the code are lost in transitions!
     </p>
   </>,
   quiz: undefined,
