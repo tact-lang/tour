@@ -88,58 +88,116 @@ type LeftPaneProps = {
 };
 
 function LeftPane({ currentExample, currentIndex, setHash }: LeftPaneProps) {
+  const [showingContents, setShowingContents] = React.useState(false);
+  const urlWithHash = (url: string) => "#" + url;
+
   const goNext = () => {
+    if (showingContents) { return }
     if (currentIndex < lessons.length - 1) {
       setHash(lessons[currentIndex + 1].url);
     }
   };
 
   const goPrevious = () => {
+    if (showingContents) { return }
     if (currentIndex > 0) {
       setHash(lessons[currentIndex - 1].url);
     }
   };
 
-  // Modal?
-  const goContents = () => { };
+  const goContents = () => {
+    if (showingContents) { return }
+    setShowingContents(true);
+  };
+
+  const goLesson = () => {
+    if (!showingContents) { return }
+    setShowingContents(false);
+    setHash(lessons[currentIndex].url);
+  };
+
+  const goUrl = (url: string) => {
+    return () => {
+      if (!showingContents) { return }
+      setShowingContents(false);
+      setHash(urlWithHash(url));
+    }
+  }
 
   useHotkeys([
     ['ArrowLeft', goPrevious],
     ['ArrowRight', goNext],
+    ['ArrowUp', goContents],
+    ['ArrowDown', goLesson],
   ], ['div.monaco-editor']);
 
-  return (<>
+  return (
     <section id="left" className="content-nav">
-      <div>
-        <h1>{currentExample.title}</h1>
-        <div className="content-text">{currentExample.content}</div>
-      </div>
-      <nav className="prev-next">
-        <button
-          onClick={goPrevious}
-          disabled={currentIndex === 0}
-          className="nav-btn"
-        >
-          {currentIndex === 0 ? 'Start' : '⬅️ Previous'}
-        </button>
-        <span>—</span>
-        <button
-          onClick={goContents}
-          className="nav-btn contents"
-        >
-          Contents ({currentIndex + 1}/{lessons.length})
-        </button>
-        <span>—</span>
-        <button
-          onClick={goNext}
-          disabled={currentIndex === lessons.length - 1}
-          className="nav-btn"
-        >
-          {currentIndex === lessons.length - 1 ? 'Last' : 'Next ➡️'}
-        </button>
-      </nav>
+      {showingContents ? (<>
+        <div>
+          <h1>All contents 📜</h1>
+          <div className="content-text">
+            {/* <h2>Basics</h2> */}
+            <ul>
+              {chapter1.lessons.map(lesson => (
+                <li key={lesson.url}>
+                  <a
+                    href={urlWithHash(lesson.url)}
+                    onClick={goUrl(lesson.url)}
+                  >
+                    {lesson.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p><a
+              href={urlWithHash(chapter0.last.url)}
+              onClick={goUrl(chapter0.last.url)}
+            >
+              What's next...?
+            </a></p>
+          </div>
+        </div>
+        <nav className="prev-next">
+          <button
+            onClick={goLesson}
+            className="nav-btn contents"
+          >
+            ⏮️ Back to the lesson
+          </button>
+        </nav>
+      </>) : (<>
+        <div>
+          <h1>{currentExample.title}</h1>
+          <div className="content-text">{currentExample.content}</div>
+        </div>
+        <nav className="prev-next">
+          <button
+            onClick={goPrevious}
+            disabled={currentIndex === 0}
+            className="nav-btn"
+          >
+            {currentIndex === 0 ? 'Start' : '⬅️ Previous'}
+          </button>
+          <span>—</span>
+          <button
+            onClick={goContents}
+            className="nav-btn contents"
+          >
+            Contents ({currentIndex + 1}/{lessons.length})
+          </button>
+          <span>—</span>
+          <button
+            onClick={goNext}
+            disabled={currentIndex === lessons.length - 1}
+            className="nav-btn"
+          >
+            {currentIndex === lessons.length - 1 ? 'Last' : 'Next ➡️'}
+          </button>
+        </nav>
+      </>)}
     </section>
-  </>);
+  );
 }
 
 type RightPaneProps = { defaultContent: string, isDarkTheme: boolean };
