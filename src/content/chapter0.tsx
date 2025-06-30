@@ -1,5 +1,4 @@
 import { type Chapter0, type Lesson, tact } from "../types";
-// import { CodeBlock } from "../CodeBlock";
 
 const home: Lesson = {
   url: "",

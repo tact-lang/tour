@@ -1,5 +1,7 @@
 import { type Lesson, tact } from "../../types";
 
+// TODO: use it for the last lesson
+
 export const lesson: Lesson = {
   url: "counter",
   quiz: undefined,
