@@ -163,14 +163,14 @@ export default function tactMonarchDefinition(): monaco.languages.IMonarchLangua
           "regex": "\\b([A-Z]{2}[A-Z0-9_]*)\\b",
           "action": "constant.other.caps"
         },
-        {
-          "regex": "(?<!\\.)\\b(const)\\s+([a-zA-Z_][A-Za-z0-9_]*)\\b",
-          "action": ["keyword.other", "constant.other.declaration"]
-        },
+        // {
+        //   "regex": "\\b(const)\\s+([a-zA-Z_][A-Za-z0-9_]*)\\b",
+        //   "action": ["keyword.other", "constant.other.declaration"]
+        // },
         {
           "regex": "(?<!\\.)\\b(null)\\b",
           "action": "constant.language.null"
-        }
+        },
       ],
       type: [
         { "include": "@type_simple" },

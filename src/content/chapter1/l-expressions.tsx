@@ -30,17 +30,16 @@ export const lesson: Lesson = {
         // Boolean literals.
         true; false;
 
-        // String literals.
+        // Single-line string literals.
         "You can be The Good Guy or the guy who saves the world... You can't be both.";
         "1234"; // a string, not a number
         "👻"; // strings support Unicode
-        "\\ \" \n \r \t \v \b \f \x00 through \xFF"; // common escape sequences
-        "\u0000 through \uFFFF and \u{0} through \u{10FFFF}"; // unicode escape sequences
+        // Common ASCII and Unicode escape sequences are supported too.
 
-        // \`null\` and \`self\` literals.
+        // Special literals.
         null; // not an instance of a primitive type, but
-              // a special value that represents the intentional absence
-              // of any other value
+        //       a special value that represents the intentional absence
+        //       of any other value
 
         self; // used to reference the current contract from within
               // and the value of the currently extended type inside
@@ -85,10 +84,10 @@ export const lesson: Lesson = {
 
         // initOf, which obtains the initial code and initial data
         // of the given contract, i.e., it's initial state.
-        initOf MyContract(); // StateInit { code, data }
+        initOf Expressions(); // StateInit { code, data }
 
         // codeOf, which only obtains the code.
-        codeOf MyContract;
+        codeOf Expressions;
     }
 
     // Constants support compile-time expressions

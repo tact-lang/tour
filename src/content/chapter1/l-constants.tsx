@@ -1,5 +1,5 @@
 import { type Lesson, tact } from "../../types";
-import { CodeBlock } from "../../CodeBlock";
+// import { CodeBlock } from "../../CodeBlock";
 
 export const lesson: Lesson = {
   url: "constants",
