@@ -31,7 +31,22 @@ export const lesson: Lesson = {
   quiz: undefined,
   code: tact`contract Types() {
     get fun showcase() {
-        // ...TODO
+        // Primitive types
+        let _: Int = 42;
+        let _: Bool = true;
+        let addr: Address =
+            address("UQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p9dz");
+        let _: Cell = emptyCell();
+        let _: Builder = beginCell();
+        let _: Slice = emptySlice();
+        let _: String = "I like 'em big, I like 'em chonky";
+        let _: StringBuilder = beginString();
+
+        // Composite types
+        let _: Int? = null; // optional: Int or null
+        let _ = map<Int, Int> { 1: 100, 2: 200 }; // a map
+        let _: StateInit = initOf Types(); // message struct
+        let _: StdAddress = parseStdAddress(addr.asSlice()); // struct
     }
 }`,
   koan: undefined,

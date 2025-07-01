@@ -1,5 +1,4 @@
 import { type Lesson, tact } from "../../types";
-// import { CodeBlock } from "../../CodeBlock";
 
 export const lesson: Lesson = {
   url: "maps",
@@ -9,8 +8,23 @@ export const lesson: Lesson = {
       The composite type <code>{"map<K, V>"}</code> is used to associate keys of type <code>K</code> with corresponding values of type <code>V</code>.
     </p>
     <p>
-      TODO
+      Serialization of integer keys or values is possible but only meaningful
+      for maps as fields of structures and maps in the contract's persistent state.
+      See the "Structs and message structs" and "Persistent state"
+      lessons later for more info.
     </p>
+    <p>
+      Finally, mind the limits — maps are quite gas-expensive
+      and have an upper limit of around 32k entries for the whole contract.
+      That is because on TON, contracts are very limited in their state, and for large
+      or unbounded, infinitely large maps, it is better to use contract sharding
+      and essentially make the entire blockchain part of your maps.
+    </p>
+    {/* <p>
+      We'll discuss sharding after we are done with the syntax basics
+      See the sharded approach in action for the Jetton (token)
+      contract system by the end of this tour.
+    </p> */}
   </>,
   quiz: undefined,
   code: tact`contract Maps() {
@@ -33,7 +47,7 @@ export const lesson: Lesson = {
 
         // Statically known .set() calls can be replaced by map literals.
         // That way, map entries will be defined at compile-time and consume much less gas.
-        let myMap2: map<Int as uint8, Int as int13> = map<Int as uint8, Int as int13> {
+        let myMap2 = map<Int as uint8, Int as int13> {
             // Key expression: Value expression
             1 + 2: 10 * pow2(3), // key 3, value 80
             1 + 3: 20 * pow2(4), // key 4, value 320
@@ -72,21 +86,6 @@ export const lesson: Lesson = {
         myMap.asCell();
     }
 }
-
-// Serialization of integer keys or values is possible but only meaningful
-// for maps as fields of structures and maps in the contract's persistent state.
-// See the "Structs and message structs" and "Persistent state"
-// sections below for more info.
-
-// Finally, mind the limits — maps are quite gas-expensive
-// and have an upper limit of around 32k entries for the whole contract.
-//
-// On TON, contracts are very limited in their state, and for large
-// or unbounded (infinitely large) maps, it is better to use contract sharding
-// and essentially make the entire blockchain part of your maps.
-//
-// See this approach in action for the Jetton (token)
-// contract system by the end of this tour.
 
 // The following are dummy structures needed for the showcase above to work.
 struct AnyStruct { field: Int }

@@ -5,7 +5,17 @@ export const lesson: Lesson = {
   title: "Expressions",
   content: <>
     <p>
-      TODO
+      Every operator in Tact forms an expression, but there’s much more to uncover,
+      as Tact offers a wide range of expressive options to choose from.
+    </p>
+    <p>
+      Notice that identifiers form an expression and have the usual naming conventions:
+      they may contain Latin lowercase letters <code>a-z</code>,
+      Latin uppercase letters <code>A-Z</code>, underscores <code>_</code>,
+      and digits <code>0-9</code>, but may not start with a digit.
+      No other symbols are allowed, and Unicode identifiers are prohibited.
+      They also cannot start with <code>__gen</code> or <code>__tact</code>
+      since those prefixes are reserved by the Tact compiler.
     </p>
   </>,
   quiz: undefined,
@@ -39,13 +49,7 @@ export const lesson: Lesson = {
         // Map literals.
         map<Int, Int as coins> { 11: 11 };
 
-        // Identifiers, with usual naming conventions:
-        // They may contain Latin lowercase letters \`a-z\`,
-        // Latin uppercase letters \`A-Z\`, underscores \`_\`,
-        // and digits 0 - 9, but may not start with a digit.
-        // No other symbols are allowed, and Unicode identifiers are prohibited.
-        // They also cannot start with __gen or __tact since those prefixes
-        // are reserved by the Tact compiler.
+        // Identifiers.
         let azAZ09_ = 5; azAZ09_;
 
         // Instantiations or instance expressions of structs and message structs.

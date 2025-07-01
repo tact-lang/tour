@@ -43,7 +43,10 @@ const last: Lesson = {
   title: "What next? ✨",
   content: (<>
     <p>
-      It's been a joy to have you on the Tour of Tact. TON Studio and Tact teams sincerely hope you enjoy the journey ahead. If you have felt comfortable this far, we strongly recommend diving deeper with these resources:
+      It's been a joy to have you on the Tour of Tact. TON Studio and Tact teams sincerely hope you enjoy the journey ahead.
+    </p>
+    <p>
+      If you have felt comfortable this far, we strongly recommend diving deeper with these resources:
     </p>
     <ul>
       <li><a href="https://docs.tact-lang.org">Official Tact documentation</a></li>

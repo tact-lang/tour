@@ -175,7 +175,7 @@ export default function tactMonarchDefinition(): monaco.languages.IMonarchLangua
       type: [
         { "include": "@type_simple" },
         {
-          "regex": "(?<!\\.)\\b(bounced|map|set)\\b",
+          "regex": "(?<!\\.)\\b(bounced|map|set)\\b(?!\\s*\\()",
           "action": {
             "token": "type.identifier",
             "next": "@type_generic_start",
@@ -339,7 +339,7 @@ export default function tactMonarchDefinition(): monaco.languages.IMonarchLangua
           "action": "keyword.other.attribute.tact storage.modifier"
         },
         {
-          "regex": "(?<!\\.)\\b(extends|get|inline|mutates)\\b",
+          "regex": "(?<!\\.)\\b(extends|get|inline|mutates)\\b(?!\\s*\\()",
           "action": "keyword.other.attribute"
         },
         {
