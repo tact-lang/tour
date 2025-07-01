@@ -70,7 +70,8 @@ export const lesson: Lesson = {
         cashback(sender());
 
         // Some of the functions can be computed at compile-time given enough data.
-        sha256("hey, I'll produce the SHA256 number at compile-time");
+        // All compile-time values are embedded directly into the resulting code..
+        sha256("hey, I'll produce the SHA256 hash during compilation");
 
         // But there are special, compile-time-only functions.
         let _: Address = address("EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2");

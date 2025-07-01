@@ -1,23 +1,22 @@
 import { type Lesson, tact } from "../../types";
-// import { CodeBlock } from "../../CodeBlock";
 
 export const lesson: Lesson = {
   url: "statements",
   title: "Statements and control flow",
   content: <>
     <p>
-      TODO
+      Statements can appear anywhere in a function body.
     </p>
   </>,
   quiz: undefined,
   code: tact`contract Statements() {
     get fun showcase() {
-        // As we've seen above, the let statement defines new variables.
+        // As we've seen earlier, the let statement defines new variables.
         // You must always provide an initial value, but type ascriptions
         // aren't mandatory except for maps and null values.
-        let theAnswer = 42;                // type ascription is not required here,
+        let theAnswer = 42; // type ascription is not required here,
         let m: map<Int, Int> = emptyMap(); // but we must specify it for maps
-        let opt: Int? = null;              // and when assigning a null value.
+        let opt: Int? = null; //              and when assigning a null value.
 
         // Block statement creates an enclosed scope.
         {
@@ -39,7 +38,7 @@ export const lesson: Lesson = {
         // Destructuring assignment is a concise way to
         // unpack structures into distinct variables.
         let st = StdAddress { workchain: 0, address: 0 }; // let statement
-        let StdAddress { address, .. } = st;              // destructuring statement
+        let StdAddress { address, .. } = st; //              destructuring statement
         //               -------  --
         //               ↑        ↑
         //               |        ignores all unspecified fields
@@ -72,7 +71,7 @@ export const lesson: Lesson = {
             // will roll back almost all changes made in the try block,
             // except for: codepage changes, gas usage counters, etc.
             //
-            // See the "Testing and debugging" section below for more info.
+            // See the "Testing and debugging" lesson later for more info.
         }
 
         // Repeat something N times.

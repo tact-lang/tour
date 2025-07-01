@@ -9,9 +9,9 @@ import { lesson as l7 } from "./l-maps";
 import { lesson as l8 } from "./l-structures";
 import { lesson as l9 } from "./l-operators";
 import { lesson as l10 } from "./l-expressions";
-// "TODO" caret:
 import { lesson as l11 } from "./l-statements";
 import { lesson as l12 } from "./l-functions";
+// "TODO" caret:
 import { lesson as l13 } from "./l-messaging";
 import { lesson as l14 } from "./l-contracts";
 import { lesson as l15 } from "./l-constants";
