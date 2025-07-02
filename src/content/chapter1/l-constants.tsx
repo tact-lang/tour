@@ -1,12 +1,17 @@
 import { type Lesson, tact } from "../../types";
-// import { CodeBlock } from "../../CodeBlock";
 
 export const lesson: Lesson = {
   url: "constants",
   title: "Constants",
   content: <>
     <p>
-      TODO
+      All constants are inlined, i.e., their values are embedded in the resulting
+      code in all places where their values are referenced in Tact code.
+    </p>
+    <p>
+      Constants can differ in scope: global constants can be referenced
+      from anywhere, while contract and trait-level constants are
+      only accessible within them via <code>self</code> references.
     </p>
   </>,
   quiz: undefined,
@@ -41,13 +46,9 @@ contract MyContract() with MyTrait {
 
     // And we MUST override and define the value of the abstract constant.
     override const OVERRIDE_ME: Int = ton("0.5");
-}
 
-// All constants are inlined, i.e., their values are embedded in the resulting
-// code in all places where their values are referenced in Tact code.
-//
-// The main difference is the scope — global can be referenced
-// from anywhere, while contract and trait-level constants are
-// only accessible within them via \`self\` references.`,
+    // The following is needed for the deployment.
+    receive() {}
+}`,
   koan: undefined,
 };

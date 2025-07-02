@@ -48,6 +48,9 @@ export const lesson: Lesson = {
         let _: StateInit = initOf Types(); // message struct
         let _: StdAddress = parseStdAddress(addr.asSlice()); // struct
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };

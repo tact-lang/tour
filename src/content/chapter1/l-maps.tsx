@@ -85,6 +85,9 @@ export const lesson: Lesson = {
         // Therefore, you can type cast any map back to its underlying Cell type.
         myMap.asCell();
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }
 
 // The following are dummy structures needed for the showcase above to work.

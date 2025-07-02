@@ -113,6 +113,9 @@ contract Structures() {
         One.fromCell(val.toCell()).toCell() == valCell;
         One.fromSlice(val.toSlice()).toSlice() == valSlice;
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };

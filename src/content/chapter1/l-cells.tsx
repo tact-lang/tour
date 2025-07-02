@@ -53,6 +53,9 @@ export const lesson: Lesson = {
         // Finally, there are methods to skip the value, i.e., to discard it.
         target.skipBool();
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };

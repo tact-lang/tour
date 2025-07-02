@@ -24,6 +24,9 @@ export const lesson: Lesson = {
         // The workchain ID is...
         // The account ID or hash of an address is...
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };

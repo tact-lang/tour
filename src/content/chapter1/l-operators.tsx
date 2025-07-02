@@ -82,6 +82,9 @@ export const lesson: Lesson = {
         false ? 1 : (false ? 2 : 3); // 3
         false ? 1 : true ? 2 : 3; //    2
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };

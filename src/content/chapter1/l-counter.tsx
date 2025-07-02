@@ -1,16 +1,15 @@
 import { type Lesson, tact } from "../../types";
 
-// TODO: use it for the last lesson
-
 export const lesson: Lesson = {
   url: "counter",
+  title: "Simple counter contract",
+  content: <>
+    <p>
+      Here is a basic smart contract that stores and manages a counter value.
+    </p>
+  </>,
   quiz: undefined,
-  koan: undefined,
-  title: "Simple counter",
-  content: <>👀👉</>,
-  code: tact`// Comments and annotated blocks should be on the left...
-
-// Defining a new Message type, which has one field
+  code: tact`// Defining a new Message type, which has one field
 // and an automatically assigned 32-bit opcode prefix
 message Add {
     // unsigned integer value stored in 4 bytes
@@ -22,7 +21,7 @@ contract SimpleCounter(
     // Persistent state variables of the contract:
     counter: Int as uint32, // actual value of the counter
     id: Int as uint32, // a unique id to deploy multiple instances
-                       // of this contract in a same workchain
+    //                    of this contract in a same workchain
     // Their default or initial values are supplied during deployment.
 ) {
     // Registers a receiver of empty messages from other contracts.
@@ -48,9 +47,10 @@ contract SimpleCounter(
         return self.counter; // <- return the counter value
     }
 
-    // Another getter function, but for the id:
+    // Another getter function, but for the id.
     get fun id(): Int {
         return self.id; // <- return the id value
     }
-}`
+}`,
+  koan: undefined,
 };

@@ -111,6 +111,9 @@ export const lesson: Lesson = {
         return; // implicitly produces nothing (named "void" in the compiler)
         // return 5; // would explicitly produce 5
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };

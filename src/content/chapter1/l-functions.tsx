@@ -99,6 +99,9 @@ contract Functions() {
         // Assembly function, called just like global functions
         rawReserveExtra(ton("0.1"), emptyCell(), 0);
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };

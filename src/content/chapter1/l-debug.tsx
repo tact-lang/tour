@@ -1,22 +1,30 @@
 import { type Lesson, tact } from "../../types";
-// import { CodeBlock } from "../../CodeBlock";
 
 export const lesson: Lesson = {
   url: "debug",
   title: "Testing and debugging",
   content: <>
     <p>
-      TODO
+      An exit code is an integer that indicates whether the transaction
+      was successful and, if not — holds the code of the exception that occurred.
+      They are the simplest litmus tests for your contracts,
+      indicating what happened and, if you are lucky, where, and why.
+    </p>
+    <p>
+      To fully understand what went wrong, you might need to read the TON Virtual
+      Machine (TVM) execution logs when running contracts in the Sandbox.
+      And to ensure that encountered issues won't happen again, do write tests
+      in Tact and TypeScript using the Sandbox + Jest toolkit provided by
+      the Blueprint framework or tact-template.
+    </p>
+    <p>
+      See the relevant exhaustive page in Tact documentation: <a
+        href="https://docs.tact-lang.org/book/debug/">Debugging and testing</a>
     </p>
   </>,
   quiz: undefined,
   code: tact`contract Debugging() {
     get fun showcase() {
-        // An exit code is an integer that indicates whether the transaction
-        // was successful and, if not — holds the code of the exception that occurred.
-        //
-        // They are the simplest litmus tests for your contracts,
-        // indicating what happened and, if you are lucky, where, and why.
         try {
             dump(
                 beginCell()
@@ -25,7 +33,7 @@ export const lesson: Lesson = {
                 .storeInt(0, 250)
                 .storeInt(0, 250)
                 .storeUint(0, 24) // oh no, we're trying to store 1024 bits,
-                                  // while cells can only store up to 1023 bits
+                //                   while cells can only store up to 1023 bits!
             );
         } catch (exitCode) {
             // exitCode is 8, which means the cell overflow has happened somewhere.
@@ -47,13 +55,9 @@ export const lesson: Lesson = {
         // the data off-chain. Use the emit() message-sending function for this.
         emit("Doing X, then Y, currently at R".asComment());
     }
-}
 
-// Those tools are handy, but they are not enough.
-// To fully understand what went wrong, you might need to read the TON Virtual
-// Machine (TVM) execution logs when running contracts in the Sandbox.
-// And to ensure that encountered issues won't happen again, do write tests
-// in Tact and TypeScript using the Sandbox + Jest toolkit provided by
-// the Blueprint framework or tact-template.`,
+    // The following is needed for the deployment.
+    receive() {}
+}`,
   koan: undefined,
 };

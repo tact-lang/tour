@@ -11,9 +11,10 @@ import { lesson as l9 } from "./l-operators";
 import { lesson as l10 } from "./l-expressions";
 import { lesson as l11 } from "./l-statements";
 import { lesson as l12 } from "./l-functions";
-// "TODO" caret:
+// TODO: extra care
 import { lesson as l13 } from "./l-messaging";
 import { lesson as l14 } from "./l-contracts";
+// ^^^^^^^^^^^^^^^^
 import { lesson as l15 } from "./l-constants";
 import { lesson as l16 } from "./l-state";
 import { lesson as l17 } from "./l-debug";

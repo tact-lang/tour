@@ -30,6 +30,9 @@ export const lesson: Lesson = {
             // not happening right now
         }
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };

@@ -93,6 +93,9 @@ export const lesson: Lesson = {
 
     // Constants support compile-time expressions
     const MOON_RADIUS_KM: Int = 1730 + (8 | 8);
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };
