@@ -59,5 +59,3 @@ export const lesson: Lesson = {
 }`,
   koan: undefined,
 };
-
-// TODO. "section below" -> "lesson later on".

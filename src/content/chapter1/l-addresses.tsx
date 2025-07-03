@@ -7,6 +7,15 @@ export const lesson: Lesson = {
     <p>
       Addresses of smart contracts on TON are deterministically obtained by combining the initial code and initial data.
     </p>
+    <p>
+      Addresses can be: ...
+    </p>
+    <p>
+      Standard internal addresses are comprised of a workchain ID, an 8-bit signed integer, and an account ID, a 256-bit unsigned integer.
+    </p>
+    <p>
+      TODO: ...
+    </p>
   </>,
   quiz: undefined,
   code: tact`contract Addresses() {
@@ -23,6 +32,7 @@ export const lesson: Lesson = {
 
         // The workchain ID is...
         // The account ID or hash of an address is...
+        // TODO
     }
 
     // The following is needed for the deployment.
@@ -30,5 +40,3 @@ export const lesson: Lesson = {
 }`,
   koan: undefined,
 };
-
-// TODO.

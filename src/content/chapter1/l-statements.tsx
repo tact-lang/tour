@@ -71,7 +71,7 @@ export const lesson: Lesson = {
             // will roll back almost all changes made in the try block,
             // except for: codepage changes, gas usage counters, etc.
             //
-            // See the "Testing and debugging" lesson later for more info.
+            // See the "Testing and debugging" lesson for more info.
         }
 
         // Repeat something N times.

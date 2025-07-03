@@ -23,7 +23,7 @@ export const lesson: Lesson = {
     <p>
       The functions discussed in this lesson are helpful but not mandatory for the contracts to operate,
       unlike the receiver functions, which can only be defined at the contract or trait levels and cannot be called directly —
-      they are only executed upon receiving specific messages. See the "Contracts and traits" lesson later for more info.
+      they are only executed upon receiving specific messages. See the "Receiving messages" lesson for more info.
     </p>
   </>,
   quiz: undefined,

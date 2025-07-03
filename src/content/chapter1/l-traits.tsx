@@ -2,22 +2,16 @@ import { type Lesson, tact } from "../../types";
 // import { CodeBlock } from "../../CodeBlock";
 
 export const lesson: Lesson = {
-  url: "contracts",
-  title: "Contracts and traits",
+  url: "traits",
+  title: "Trait inheritance and contract structure",
   content: <>
-    <p>
-      TODO
-    </p>
+    <p>TODO: Intro</p>
+    <p>TODO: Inheritance via with keyword</p>
+    <p>TODO: Traits</p>
+    <p>TODO: Contracts</p>
   </>,
   quiz: undefined,
-  code: tact`// Tact allows you to import Tact and FunC code.
-// Additionally, there's a versatile set of standard libraries
-// which come bundled in with a compiler, but are not included
-// in projects right away.
-//
-// To import a standard library, instead of specifying a path to a file
-// start the import string with @stdlib/.
-import "@stdlib/ownable"; // for the Ownable trait
+  code: tact`import "@stdlib/ownable"; // for the Ownable trait
 
 // Traits have the same structure as contracts and are used
 // to provide some means of inheritance and common code reuse.
@@ -102,7 +96,7 @@ contract MyContract(
     // for user wallets, where apps that present some UI for them have to
     // communicate with contracts on chain to perform transfers on their behalf.
     external(msg: MyMsg) {
-        // There is no sender, i.e., calling sender() here won't work.
+        // There is no sender, so calling sender() here won't work.
         // Additionally, there are no guarantees that the received message
         // is authentic and is not malicious. Therefore, when receiving
         // such messages one has to first check the signature to validate the sender,
