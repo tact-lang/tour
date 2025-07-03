@@ -58,7 +58,7 @@ function App() {
         </a>
         <div className="nav-right">
           <a href="https://docs.tact-lang.org" className="link" target="_blank" rel="noopener noreferrer">
-            docs.tact-lang.org
+            Documentation
           </a>
           <div className="theme-picker">
             <button
@@ -163,7 +163,7 @@ function LeftPane({ currentExample, currentIndex, setHash }: LeftPaneProps) {
             onClick={goLesson}
             className="nav-btn contents"
           >
-            ⏮️ Back to the lesson
+            ⬇️ Back to the lesson
           </button>
         </nav>
       </>) : (<>
@@ -184,7 +184,7 @@ function LeftPane({ currentExample, currentIndex, setHash }: LeftPaneProps) {
             onClick={goContents}
             className="nav-btn contents"
           >
-            Contents ({currentIndex + 1}/{lessons.length})
+            ⬆️ Contents ({currentIndex + 1}/{lessons.length})
           </button>
           <span>—</span>
           <button

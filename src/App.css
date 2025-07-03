@@ -173,6 +173,7 @@ html.theme-dark .logo-dark {
 
 .content-text ul>li {
   padding: 4px 12px;
+  color: var(--text-muted);
 }
 
 .content-text a {

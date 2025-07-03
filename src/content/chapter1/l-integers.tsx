@@ -33,6 +33,9 @@ export const lesson: Lesson = {
         let factual: Bool = !!(true || false);
         let fax: Bool = true && factual;
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };

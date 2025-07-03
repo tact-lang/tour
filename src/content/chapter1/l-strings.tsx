@@ -28,6 +28,9 @@ export const lesson: Lesson = {
             .concat("World!");
         sb.toString(); // "Hello, World!"
     }
+
+    // The following is needed for the deployment.
+    receive() {}
 }`,
   koan: undefined,
 };

@@ -163,19 +163,19 @@ export default function tactMonarchDefinition(): monaco.languages.IMonarchLangua
           "regex": "\\b([A-Z]{2}[A-Z0-9_]*)\\b",
           "action": "constant.other.caps"
         },
-        {
-          "regex": "(?<!\\.)\\b(const)\\s+([a-zA-Z_][A-Za-z0-9_]*)\\b",
-          "action": ["keyword.other", "constant.other.declaration"]
-        },
+        // {
+        //   "regex": "\\b(const)\\s+([a-zA-Z_][A-Za-z0-9_]*)\\b",
+        //   "action": ["keyword.other", "constant.other.declaration"]
+        // },
         {
           "regex": "(?<!\\.)\\b(null)\\b",
           "action": "constant.language.null"
-        }
+        },
       ],
       type: [
         { "include": "@type_simple" },
         {
-          "regex": "(?<!\\.)\\b(bounced|map|set)\\b",
+          "regex": "(?<!\\.)\\b(bounced|map|set)\\b(?!\\s*\\()",
           "action": {
             "token": "type.identifier",
             "next": "@type_generic_start",
@@ -339,7 +339,7 @@ export default function tactMonarchDefinition(): monaco.languages.IMonarchLangua
           "action": "keyword.other.attribute.tact storage.modifier"
         },
         {
-          "regex": "(?<!\\.)\\b(extends|get|inline|mutates)\\b",
+          "regex": "(?<!\\.)\\b(extends|get|inline|mutates)\\b(?!\\s*\\()",
           "action": "keyword.other.attribute"
         },
         {
