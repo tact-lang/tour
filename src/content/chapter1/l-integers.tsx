@@ -7,6 +7,13 @@ export const lesson: Lesson = {
     <p>
       <code>Int</code> is a 257-bit signed integer, which can have smaller bit-length in persistent contract's state (storage).
     </p>
+    <p>
+      Boolean or <code>Bool</code> values, true and false, are represented as integers on the blockchain
+      with either a single 1 bit or a single 0 bit correspondingly. That said, Tact
+      views booleans as a separate type <code>Bool</code>.
+      They take only 1 bit when saved in persistent storage, but in runtime operations
+      they are no different than the regular 257-bit signed integers.
+    </p>
   </>,
   quiz: undefined,
   code: tact`contract Integers() {
@@ -24,11 +31,6 @@ export const lesson: Lesson = {
 
         let nanoToncoin: Int = 1; //    1 nanoToncoin = 0.000,000,001 Toncoin
         let toncoin: Int = ton("1"); // 1 Toncoin = 1,000,000,000 nanoToncoin
-
-        // Booleans (true and false) count as a separate type in Tact,
-        // but on the blockchain they are represented as integers.
-        //
-        // They take only 1 bit when saved in persistent storage.
 
         let factual: Bool = !!(true || false);
         let fax: Bool = true && factual;

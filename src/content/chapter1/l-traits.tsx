@@ -1,21 +1,22 @@
 import { type Lesson, tact } from "../../types";
-// import { CodeBlock } from "../../CodeBlock";
 
 export const lesson: Lesson = {
   url: "traits",
-  title: "Trait inheritance and contract structure",
+  title: "Trait inheritance",
   content: <>
-    <p>TODO: Intro</p>
-    <p>TODO: Inheritance via with keyword</p>
-    <p>TODO: Traits</p>
-    <p>TODO: Contracts</p>
+    <p>
+      Tact doesn't support classical class inheritance but instead introduces the concept of _traits_, which can be viewed as abstract contracts, like abstract classes in popular object-oriented languages. They have the same structure as contracts but cannot initialize persistent state variables. That is, the only thing traits lack is the special <code>init()</code> function.
+    </p>
+    <p>
+      Traits allow the contracts inheriting them to re-use all or some of the functions and override the behavior of others. Traits also allow inheriting and overriding constants.
+    </p>
+    <p>
+      To inherit a trait and all of its transitive contents, specify the name of the trait after the <code>with</code> keyword in the contract definition.
+    </p>
   </>,
   quiz: undefined,
   code: tact`import "@stdlib/ownable"; // for the Ownable trait
 
-// Traits have the same structure as contracts and are used
-// to provide some means of inheritance and common code reuse.
-//
 // Like contracts, traits can also inherit other traits.
 trait MyTrait with Ownable {
     owner: Address; // required field from the Ownable trait
@@ -45,14 +46,9 @@ trait MyTrait with Ownable {
     }
 }
 
-// Contract definitions in Tact conveniently represent smart contracts
-// on TON Blockchain. They hold all variables, functions, getters and receivers,
-// while providing accessible abstractions for working with them.
 contract MyContract(
-    // Persistent state variables of the contract:
-    owner: Address, // required field from the Ownable trait
+    owner: Address,
     accumulator: Int as uint8,
-    // Their default or initial values are supplied during deployment.
 ) with MyTrait, Ownable {
 
     // The internal message receiver is a function that handles messages received
@@ -78,46 +74,7 @@ contract MyContract(
         cashback(sender());
     }
 
-    // The bounced message receiver is a function that handles messages sent
-    // from this contract and bounced back to it because of a malformed payload or
-    // some issues on the recipient side.
-    bounced(msg: bounced<MyMsg>) {
-        // Bounced message bodies are limited by their first 256 bits, which
-        // means that excluding their 32-bit opcode there are only 224 bits left
-        // for other contents of MyMsg.
-        //
-        // Thus, in message structs prefer to put small important fields first.
-        require(msg.someVal > 42, "Unexpected bounce!");
-        self.accumulator = msg.someVal;
-    }
-
-    // The external message receiver is a function that handles messages sent
-    // to this contract from outside the blockchain. That is often the case
-    // for user wallets, where apps that present some UI for them have to
-    // communicate with contracts on chain to perform transfers on their behalf.
-    external(msg: MyMsg) {
-        // There is no sender, so calling sender() here won't work.
-        // Additionally, there are no guarantees that the received message
-        // is authentic and is not malicious. Therefore, when receiving
-        // such messages one has to first check the signature to validate the sender,
-        // and explicitly agree to accept the message and fund its processing
-        // in the current transaction with acceptMessage() function.
-        require(msg.someVal > 42, "Nothing short of 42 is allowed!");
-        self.accumulator = msg.someVal;
-        acceptMessage();
-    }
-
-    // Getter functions or get methods are special functions that can only
-    // be called from within this contract or off-chain, and never by other contracts.
-    // They cannot modify the contract's state and they do not affect its balance.
-    // The IO analogy would be that they can only "read", not "write".
-    get fun data(): MyContract {
-        // This getter returns the current state of the contract's variables,
-        // which is convenient for tests but not advised for production.
-        return self;
-    }
-
-    // Finally, for each inherited trait contract may override its virtual internal
+    // For each inherited trait contract may override its virtual internal
     // functions and it MUST override its abstract internal functions as to provide
     // their defined bodies.
     override fun trust(msg: MyMsg) {
