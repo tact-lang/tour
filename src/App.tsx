@@ -58,7 +58,7 @@ function App() {
         </a>
         <div className="nav-right">
           <a href="https://docs.tact-lang.org" className="link" target="_blank" rel="noopener noreferrer">
-            docs.tact-lang.org
+            Documentation
           </a>
           <div className="theme-picker">
             <button
@@ -163,7 +163,7 @@ function LeftPane({ currentExample, currentIndex, setHash }: LeftPaneProps) {
             onClick={goLesson}
             className="nav-btn contents"
           >
-            ⏮️ Back to the lesson
+            ⬇️ Back to the lesson
           </button>
         </nav>
       </>) : (<>
@@ -184,7 +184,7 @@ function LeftPane({ currentExample, currentIndex, setHash }: LeftPaneProps) {
             onClick={goContents}
             className="nav-btn contents"
           >
-            Contents ({currentIndex + 1}/{lessons.length})
+            ⬆️ Contents ({currentIndex + 1}/{lessons.length})
           </button>
           <span>—</span>
           <button
@@ -207,7 +207,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
   const editorRef = React.useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const monacoRef = React.useRef<typeof monaco>(null);
 
-  // Will be executed at most every one and a half seconds, even if it's called a lot.
+  // Will be executed at most every X seconds, even if it's called a lot.
   const throttledCompileDeployLoop = useThrottledCallback(async () => {
     if (!editorRef.current) return;
     if (!monacoRef.current) return;
@@ -255,7 +255,13 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
         message: msg,
       };
     }));
-  }, 1500);
+  }, 1200);
+
+  // React.useEffect(() => {
+  //   const interval = setInterval(() => {
+  //   }, 1500);
+  //   return () => clearInterval(interval);
+  // });
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
