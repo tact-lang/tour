@@ -9,6 +9,7 @@
     "build": "cross-env \"PUBLIC_URL=https://tour.tact-lang.org\" node scripts/build.js",
     "lint": "eslint src/",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "test:ui": "vitest --ui",
     "test:watch": "vitest",
     "serve": "yarn build && serve -s build"
@@ -80,10 +81,13 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.53.2",
+    "@vitest/browser": "3.1.4",
     "@vitest/ui": "3.1.4",
     "cross-env": "^7.0.3",
     "eslint-plugin-vitest": "^0.5.4",
     "jsdom": "^26.1.0",
+    "playwright": "^1.53.2",
     "serve": "^14.2.4",
     "vitest": "3.1.4"
   },

@@ -18,15 +18,22 @@ export default defineConfig({
       exclude: [
         'src/**/*.d.ts'
       ]
-    }
+    },
+    // Not mature enough:
+    // browser: {
+    //   enabled: true,
+    //   provider: 'playwright',
+    //   headless: true,
+    //   instances: [{ browser: 'firefox' }],
+    // },
   },
   resolve: {
     alias: {
       "^react-native$": "react-native-web",
       '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
-    }
+    },
   },
   define: {
     'process.env.PUBLIC_URL': '""',
-  }
+  },
 });
