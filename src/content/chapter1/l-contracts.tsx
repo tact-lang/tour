@@ -1,7 +1,7 @@
 import { type Lesson, tact } from "../../types";
 
 export const lesson: Lesson = {
-  url: "traits",
+  url: "contracts",
   title: "Contract structure",
   content: <>
     <p>
