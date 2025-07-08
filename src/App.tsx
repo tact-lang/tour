@@ -255,7 +255,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
         message: msg,
       };
     }));
-  }, 1200);
+  }, 1100);
 
   // React.useEffect(() => {
   //   const interval = setInterval(() => {
@@ -277,39 +277,83 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
   return (<>
     <section id="right">
       <section id="editor">
-        <div className="editor-content">
-          {/* NOTE: Web IDE usage: https://github.com/tact-lang/web-ide/blob/main/src/components/workspace/Editor/Editor.tsx */}
-          {/* NOTE: TxTracer usage: https://github.com/tact-lang/TxTracer/tree/main/src/shared/ui/CodeEditor */}
-          <Editor
-            defaultLanguage="tact"
-            defaultValue={undefined}
-            value={defaultContent}
-            theme={isDarkTheme ? "vs-dark" : "vs"}
-            options={{
-              minimap: { enabled: false },
-              fontSize: 14,
-              bracketPairColorization: { enabled: true }
-            }}
-            beforeMount={(monaco) => {
-              monaco.languages.register({ id: "tact" });
-              monaco.languages.setMonarchTokensProvider("tact", tactMonarchDefinition());
-            }}
-            onMount={(editor, monaco) => {
-              editorRef.current = editor;
-              monacoRef.current = monaco;
-            }}
-            onChange={(_value, _ev) => {
-              // if (!editorRef.current) return;
-              // if (!monacoRef.current) return;
-              // const model = editorRef.current.getModel();
-              // if (!model) return;
-              // monacoRef.current.editor.setModelMarkers(model, 'default', []);
-              // throttledCompileDeployLoop();
-            }}
-          />
-        </div>
+        {/* NOTE: Web IDE usage: https://github.com/tact-lang/web-ide/blob/main/src/components/workspace/Editor/Editor.tsx */}
+        {/* NOTE: TxTracer usage: https://github.com/tact-lang/TxTracer/tree/main/src/shared/ui/CodeEditor */}
+        <Editor
+          defaultLanguage="tact"
+          defaultValue={undefined}
+          value={defaultContent}
+          theme={isDarkTheme ? "vs-dark" : "vs"}
+          options={{
+            minimap: { enabled: false },
+            fontSize: 14,
+            bracketPairColorization: { enabled: true },
+            lineNumbersMinChars: 3,
+            padding: { top: 4 },
+          }}
+          beforeMount={(monaco) => {
+            monaco.languages.register({
+              id: "tact",
+              aliases: ["Tact"],
+              extensions: [".tact"],
+            });
+            monaco.languages.setMonarchTokensProvider("tact", tactMonarchDefinition());
+            monaco.languages.setLanguageConfiguration("tact", {
+              comments: { lineComment: "//" },
+              wordPattern: /([a-zA-Z$_][a-zA-Z0-9$_]*)/,
+              brackets: [
+                ["{", "}"],
+                ["[", "]"],
+                ["(", ")"]
+              ],
+              colorizedBracketPairs: [
+                ["{", "}"],
+                ["[", "]"],
+                ["(", ")"]
+              ],
+              autoClosingPairs: [
+                { open: "{", close: "}" },
+                { open: "[", close: "]" },
+                { open: "(", close: ")" },
+                { open: "\"", close: "\"", notIn: ["string"] },
+              ],
+              surroundingPairs: [
+                { open: "{", close: "}" },
+                { open: "[", close: "]" },
+                { open: "(", close: ")" },
+                { open: "\"", close: "\"" },
+              ],
+              onEnterRules: [
+                {
+                  beforeText: /^\s*\/\/\/.*$/,
+                  action: { indentAction: 0, appendText: "/// " },
+                }
+              ],
+              folding: {
+                markers: {
+                  start: /^\s*\/\/ region:\b/,
+                  end: /^\s*\/\/ endregion\b/
+                }
+              }
+            });
+          }}
+          onMount={(editor, monaco) => {
+            editorRef.current = editor;
+            monacoRef.current = monaco;
+          }}
+          onChange={(_value, _ev) => {
+            if (!editorRef.current) return;
+            if (!monacoRef.current) return;
+            const model = editorRef.current.getModel();
+            if (!model) return;
+            monacoRef.current.editor.setModelMarkers(model, 'default', []);
+            // throttledCompileDeployLoop();
+          }}
+        />
       </section>
       <aside id="output">
+        {/* TODO: add the output buttons row w/ generated stuff */}
+        {/* {output} */}
         {/* <div className="output-header">Output</div> */}
         <div className="output-content">
           <pre>{output}</pre>
