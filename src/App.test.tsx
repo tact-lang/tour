@@ -13,6 +13,7 @@ export async function waitSeconds(seconds: number = 2) {
 }
 
 test('renders title', () => {
+  render(<App />);
   const logoElements = screen.getAllByAltText(/Tact Tour/i);
   expect(logoElements).toHaveLength(2);
   expect(logoElements[0]).toBeInTheDocument();
