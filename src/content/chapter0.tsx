@@ -13,14 +13,6 @@ const home: Lesson = {
     <p>
       The tour is interactive! The code shown is editable and will be compiled and evaluated as you type. Anything you print using <code>dump()</code> will be shown in the bottom section, along with any compile errors and warnings.
     </p>
-    {/* <CodeBlock
-      code={ts`// WIP: This is here to test highlighting & friends
-console.log(new Array(10).join(10 - "a") + " Batman!"); // a lot more text here to check the scroll`}
-      lang="ts"
-    />
-    <CodeBlock
-      code={tact`dump("Yay, Tact highlighting!");`}
-    /> */}
     <p>
       You can navigate through the tour using keyboard arrows ⬅️ and ➡️ to move between lessons or ⬆️ and ⬇️  to open and close the list of contents. Additionally, you can simply click the relevant buttons below the content.
     </p>
@@ -64,5 +56,7 @@ const last: Lesson = {
 };
 
 const chapter0: Chapter0 = { home, last };
+
+// NOTE: here can be the "everything/all" page. Or not.
 
 export default chapter0;

@@ -11,10 +11,12 @@ import { lesson as l9 } from "./l-operators";
 import { lesson as l10 } from "./l-expressions";
 import { lesson as l11 } from "./l-statements";
 import { lesson as l12 } from "./l-functions";
-// NOTE: as per another, message-focused contents issue.
+// TODO
+// and put parent/child contract communication
+// into the messaging, I guess -> just basics.
 // import { lesson as l13 } from "./l-messaging";
-// import { lesson as l14 } from "./l-receive";
-// import { lesson as l15 } from "./l-send";
+import { lesson as l14 } from "./l-receive";
+import { lesson as l15 } from "./l-send";
 import { lesson as l16 } from "./l-import";
 import { lesson as l17 } from "./l-contracts";
 import { lesson as l18 } from "./l-traits";
@@ -35,9 +37,13 @@ const chapter: Chapter = {
   url: "basics", // or "fundamentals"
   lessons: [
     l1, l2, l3, l4, l5, l6, l7, l8,
-    l9, l10, l11, l12, /* l13, l14, l15, */ l16,
+    l9, l10, l11, l12, l14, l15, l16,
     l17, l18, l19, l20, l21, l22, l23,
   ],
 };
 
 export default chapter;
+
+// TODO:
+// - [ ] l-messaging, brief
+// - [ ] l-receive, receivers
