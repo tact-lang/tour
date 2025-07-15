@@ -59,11 +59,10 @@ export const lesson: Lesson = {
     </p>
     <p>
       You can obtain the original, unprocessed message body by using the
-      helper <code>inMsg()</code> function from the Tact's standard library.
-      It returns the <code>Slice</code> that can be empty,
-      start with 4 zero bytes and represent a text comment,
-      or start with 4 bytes with a non-zero message opcode representing
-      a binary message which fields follow soonafter.
+      helper <code><a href="https://docs.tact-lang.org/ref/core-contextstate#inmsg">inMsg()</a></code> function
+      from the Tact's standard library. It returns the <code>Slice</code> that can be empty,
+      start with 4 zero bytes and represent a text comment, or start with 4 bytes with a non-zero
+      message opcode representing a binary message which fields follow soonafter.
     </p>
   </>,
   quiz: undefined,
