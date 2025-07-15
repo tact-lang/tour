@@ -11,6 +11,14 @@ export const lesson: Lesson = {
       Traits allow the contracts inheriting them to re-use all or some of the functions and override the behavior of others. Traits also allow inheriting and overriding constants.
     </p>
     <p>
+      Within traits and contracts, you can define scoped functions and only accessible
+      from them or their successors. Those functions are often called internal functions.
+    </p>
+    <p>
+      If you won't be using any contract fields, to preserve space it's better to define
+      such functions globally, i.e., on the top-level.
+    </p>
+    <p>
       To inherit a trait and all of its transitive contents, specify the name of the trait after the <code>with</code> keyword in the contract definition.
     </p>
   </>,
@@ -21,12 +29,7 @@ export const lesson: Lesson = {
 trait MyTrait with Ownable {
     owner: Address; // required field from the Ownable trait
 
-    // Within traits and contracts, you can define scoped functions
-    // and only accessible from them or their successors. Those functions
-    // are often called internal functions.
-    //
-    // If you won't be using any contract fields, it's better to define
-    // such functions as global, i.e., on the top-level.
+    // A simple, non-overwritable internal function.
     fun addIfOwner(a: Int, b: Int): Int {
         self.requireOwner();
         return a + b;
@@ -44,6 +47,9 @@ trait MyTrait with Ownable {
         self.requireOwner();
         require(msg.someVal > 42, "Too low!");
     }
+
+    // You can also define constants that will be inherited by the contract
+    const MOON_RADIUS_KM: Int = 1730 + (8 | 8);
 }
 
 contract MyContract(
@@ -65,21 +71,15 @@ contract MyContract(
         });
     }
 
-    // For deployments, it is common to use the following receiver
-    // often called an "empty receiver", which handles \`null\` (empty)
-    // message bodies of internal messages.
-    receive() {
-        // Forward the remaining value in the
-        // incoming message (surplus) back to the sender.
-        cashback(sender());
-    }
-
     // For each inherited trait contract may override its virtual internal
     // functions and it MUST override its abstract internal functions as to provide
     // their defined bodies.
     override fun trust(msg: MyMsg) {
         require(msg.someVal == 42, "Always bring your towel with you");
     }
+
+    // Used for the deployment.
+    receive() { }
 }
 
 // Message struct with 123 as its 32-bit opcode.

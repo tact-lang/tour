@@ -19,7 +19,7 @@ export const lesson: Lesson = {
     </p>
     <p>
       See the relevant exhaustive page in Tact documentation: <a
-        href="https://docs.tact-lang.org/book/debug/">Debugging and testing</a>
+        href="https://docs.tact-lang.org/book/debug/">Debugging and testing</a>.
     </p>
   </>,
   quiz: undefined,

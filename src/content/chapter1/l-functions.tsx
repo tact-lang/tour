@@ -9,8 +9,8 @@ export const lesson: Lesson = {
       While some functions stand out, many of their parts and behaviors are common.
     </p>
     <p>
-      Due to the nature of TVM, Tact uses the <a href="https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_value">call by value</a>
-      parameter-passing and binding strategy, which applies to all function kinds.
+      Due to the nature of TVM, Tact uses the <a href="https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_value">call by value</a> parameter-passing
+      and binding strategy, which applies to all function kinds.
       That is, the evaluated value of any variable passed in a function call or assigned
       in the <code>let</code> or assignment statement is copied.
     </p>

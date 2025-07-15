@@ -26,7 +26,8 @@
   align-items: center;
   height: var(--navbar-height);
   min-height: var(--navbar-height);
-  padding: var(--gap) var(--gap-double);
+  /* padding: var(--gap) var(--gap-double); */
+  padding: var(--gap);
   color: var(--text-color);
   background-color: var(--header-bg);
   border-bottom: 1px solid var(--border-color);
@@ -125,10 +126,15 @@ html.theme-dark .logo-dark {
 }
 
 #editor {
-  position: relative;
-  overflow: clip;
+  /* position: relative; */
+  height: 40vh;
+  overflow: hidden;
   flex-grow: 1;
   min-height: 15rem;
+}
+
+textarea {
+  outline: 0;
 }
 
 #output {
@@ -188,9 +194,12 @@ html.theme-dark .logo-dark {
 /* Larger than medium screen and has enough to height to not worry about losing vertical space */
 
 @media (min-width: 1200px) and (min-height: 700px) {
+  .navbar {
+    padding: var(--gap-double);
+  }
+
   #left {
-    /* Lift the navigation bar up a bit so it's not sitting right on the bottom */
-    padding: calc(var(--gap) * 2);
+    padding: var(--gap-double);
   }
 
   #right {
@@ -198,10 +207,7 @@ html.theme-dark .logo-dark {
     border-radius: var(--border-radius);
     padding: 2px 1px;
     box-shadow: var(--shadow);
-    margin-top: calc(var(--gap) * 2);
-    margin-right: calc(var(--gap) * 3);
-    margin-bottom: calc(var(--gap) * 3);
-    margin-left: calc(var(--gap) * 2);
+    margin: var(--gap-double);
   }
 }
 
@@ -269,14 +275,13 @@ html.theme-dark .logo-dark {
   color: var(--text-muted);
 }
 
-/* a {
-  color: var(--accent-color);
-  display: inline-block;
-  text-decoration-color: var(...);
-} */
-
 .content-text a {
   color: var(--accent-color);
+  text-decoration: none;
+}
+
+.content-text a:hover {
+  text-decoration: underline;
 }
 
 /* Navigation */
