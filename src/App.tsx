@@ -312,7 +312,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
           defaultLanguage="tact"
           defaultValue={undefined}
           value={defaultContent}
-          theme={isDarkTheme ? "vs-dark" : "vs"}
+          theme={isDarkTheme ? "vs-dark-aug" : "vs-aug"}
           options={{
             minimap: { enabled: false },
             fontSize: 14,
@@ -365,6 +365,24 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
                   end: /^\s*\/\/ endregion\b/
                 }
               }
+            });
+            monaco.editor.defineTheme("vs-dark-aug", {
+              base: "vs-dark",
+              inherit: true,
+              rules: [
+                { token: 'entity.name.function.tact', foreground: 'DCDCAA' },
+                { token: 'constant.numeric', foreground: 'B5CEA8' },
+              ],
+              colors: {},
+            });
+            monaco.editor.defineTheme("vs-aug", {
+              base: "vs",
+              inherit: true,
+              rules: [
+                { token: 'entity.name.function.tact', foreground: '795E26' },
+                { token: 'constant.numeric', foreground: '098658' },
+              ],
+              colors: {},
             });
           }}
           onMount={(editor, monaco) => {
