@@ -319,6 +319,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
             bracketPairColorization: { enabled: true },
             lineNumbersMinChars: 3,
             padding: { top: 4 },
+            renderLineHighlight: 'all',
           }}
           beforeMount={(monaco) => {
             monaco.languages.register({

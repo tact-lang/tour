@@ -28,7 +28,16 @@ export const lesson: Lesson = {
       <li>And, finally, arbitrary private helper functions</li>
     </ul>
     <p>
-      Additionally, Tact allows converting runtime contract instances to cells or slices. They contain contract data: all contract fields plus the leading bit representing the lazy initialization bit if the contract doesn't use the contract parameters syntax.
+      By using the special <code>self</code> keyword, you can access the data variables,
+      constants, and internal or getter functions that are defined in the contract or
+      inherited by it from some of the traits.
+    </p>
+    <p>
+      Additionally, Tact allows converting runtime contract instances to cells or slices by
+      calling <code>self.toCell()</code> or <code>self.toSlice()</code> respectively.
+      Those cells and slices contain contract data: all contract fields plus the leading
+      bit representing the lazy initialization bit if the contract doesn't use the contract
+      parameters syntax.
     </p>
     <CodeBlock code={tact`contract PseudoWalletContract(
     seqno: Int as uint32,
