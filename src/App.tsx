@@ -74,8 +74,15 @@ function App() {
       </nav>
 
       <article id="playground">
-        <LeftPane currentExample={currentExample} currentIndex={currentIndex} setHash={setHash} />
-        <RightPane defaultContent={currentExample.code} isDarkTheme={isDarkTheme} />
+        <LeftPane
+          currentExample={currentExample}
+          currentIndex={currentIndex}
+          setHash={setHash}
+        />
+        <RightPane
+          defaultContent={currentExample.code}
+          isDarkTheme={isDarkTheme}
+        />
       </article>
     </div>
   );
@@ -203,9 +210,22 @@ function LeftPane({ currentExample, currentIndex, setHash }: LeftPaneProps) {
 type RightPaneProps = { defaultContent: string, isDarkTheme: boolean };
 
 function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
-  const [output, setOutput] = React.useState("Use Ctrl/Cmd+S to compile and deploy!");
+  const defaultOutput = "Use Ctrl/Cmd+S to compile and deploy!";
+  const errorOutput = "Fix errors and press Ctrl/Cmd+S to recompile.";
+  const rightOutput = "Compiled without errors!";
+  // NOTE: consider moving the output state into the sub-component for the output itself
+  const [output, setOutput] = React.useState(defaultOutput);
   const editorRef = React.useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const monacoRef = React.useRef<typeof monaco>(null);
+
+  // Removes markers from the editor
+  const resetEditorMarkers = () => {
+    if (!editorRef.current) return;
+    if (!monacoRef.current) return;
+    const model = editorRef.current.getModel();
+    if (!model) return;
+    monacoRef.current.editor.setModelMarkers(model, 'default', []);
+  };
 
   // Will be executed at most every X seconds, even if it's called a lot.
   const throttledCompileDeployLoop = useThrottledCallback(async () => {
@@ -219,12 +239,12 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
     const buildRes = await compile(fs);
     if (buildRes.ok) {
       monacoRef.current.editor.setModelMarkers(model, 'default', []);
-      setOutput("Compiled without errors!");
+      setOutput(rightOutput);
       return;
     }
 
     // console.log(buildRes);
-    setOutput("Fix errors and press Ctrl/Cmd+S to recompile.");
+    setOutput(errorOutput);
     monacoRef.current.editor.setModelMarkers(model, 'default', buildRes.error.map((v) => {
       const msgStart = v.message.indexOf(' ') + 1;
       const msgEnd = v.message.indexOf('\n');
@@ -257,15 +277,24 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
     }));
   }, 1100);
 
+  // Handle changes of the default content
+  React.useEffect(() => {
+    resetEditorMarkers();
+    // NOTE: once the button row will be generated,
+    //       make sure to reset it here
+    setOutput(defaultOutput);
+  }, [defaultContent]);
+
   // React.useEffect(() => {
   //   const interval = setInterval(() => {
   //   }, 1500);
   //   return () => clearInterval(interval);
   // });
 
+  // Handle Ctrl/Cmd+s keypresses
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
         e.preventDefault();
         throttledCompileDeployLoop();
       }
@@ -342,18 +371,16 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
             monacoRef.current = monaco;
           }}
           onChange={(_value, _ev) => {
-            if (!editorRef.current) return;
-            if (!monacoRef.current) return;
-            const model = editorRef.current.getModel();
-            if (!model) return;
-            monacoRef.current.editor.setModelMarkers(model, 'default', []);
+            resetEditorMarkers();
             // throttledCompileDeployLoop();
           }}
         />
       </section>
       <aside id="output">
         {/* TODO: add the output buttons row w/ generated stuff */}
-        {/* {output} */}
+        {/*
+          > Sent message X to sender()
+          < Received message Y from self/...: {...contents...} */}
         {/* <div className="output-header">Output</div> */}
         <div className="output-content">
           <pre>{output}</pre>

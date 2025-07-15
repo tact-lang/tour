@@ -9,6 +9,8 @@ import grammarTact from './tactTextMateDefinition.json';
 
 const themeDark: BundledTheme = 'one-dark-pro';
 const themeLight: BundledTheme = 'one-light';
+// const themeDark: BundledTheme = 'dark-plus';
+// const themeLight: BundledTheme = 'light-plus';
 const hl = createHighlighter({
   themes: [themeDark, themeLight],
   langs: [
