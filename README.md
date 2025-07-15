@@ -63,6 +63,8 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 - https://developer.mozilla.org/en-US/docs/Learn_web_development/Core
 - https://ocaml.org/docs/tour-of-ocaml
 - https://cssbattle.dev/learn/demo/1
+- https://exercism.org/tracks/elixir/concepts
+- https://tour.dlang.org
 
 ## License
 

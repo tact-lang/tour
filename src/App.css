@@ -269,14 +269,13 @@ html.theme-dark .logo-dark {
   color: var(--text-muted);
 }
 
-/* a {
-  color: var(--accent-color);
-  display: inline-block;
-  text-decoration-color: var(...);
-} */
-
 .content-text a {
   color: var(--accent-color);
+  text-decoration: none;
+}
+
+.content-text a:hover {
+  text-decoration: underline;
 }
 
 /* Navigation */
