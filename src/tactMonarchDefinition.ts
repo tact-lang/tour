@@ -362,8 +362,7 @@ export default function tactMonarchDefinition(): monaco.languages.IMonarchLangua
       function: [
         {
           "regex": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
-          "action": ["variable", "punctuation.brackets.round"],
-          // "entity.name.function"
+          "action": ["entity.name.function", "punctuation.brackets.round"],
         }
       ],
       variable: [
