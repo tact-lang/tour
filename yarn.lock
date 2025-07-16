@@ -1943,6 +1943,13 @@
   dependencies:
     symbol.inspect "1.0.1"
 
+"@ton/core@^0.61.0":
+  version "0.61.0"
+  resolved "https://registry.yarnpkg.com/@ton/core/-/core-0.61.0.tgz#09b37801cb2f5a942020fcc992be1e99f4b16689"
+  integrity sha512-0qyVfP2dDue2bq80ydXggo2MlufcmzuFk6G94qRrZxvyQ3NSe4UeBTeRf1gQmN7tywgTsX2gS61e4yvJrlUu4Q==
+  dependencies:
+    symbol.inspect "1.0.1"
+
 "@ton/crypto-primitives@2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@ton/crypto-primitives/-/crypto-primitives-2.1.0.tgz#8c9277c250b59aae3c819e0d6bd61e44d998e9ca"
@@ -1959,11 +1966,14 @@
     jssha "3.2.0"
     tweetnacl "1.0.3"
 
-"@ton/sandbox@^0.31.0":
-  version "0.31.0"
-  resolved "https://registry.yarnpkg.com/@ton/sandbox/-/sandbox-0.31.0.tgz#571c8e7a774ba4a6e7194bdf9331ee46869a2c82"
-  integrity sha512-UdcpRwW9EIowQ10kpswj5liy9erhtvVeQ5WlyD/qJMnlKys9BzvNhb9thW3na13x4piN0b/tLkqddtKE4JXcuQ==
+"@ton/sandbox@^0.35.1":
+  version "0.35.1"
+  resolved "https://registry.yarnpkg.com/@ton/sandbox/-/sandbox-0.35.1.tgz#6b211b981c4088f9aa591b3cae9964b44e23300b"
+  integrity sha512-h7oYbCLWRxYNU6quNKyC0Ji4F1VOKTMzy758MxYFmVY+VmV95Bj6fECiQFS0+u4Qy6TEAePuoSnQxMHW3eqRbQ==
   dependencies:
+    "@vscode/debugadapter" "^1.68.0"
+    chalk "^4.1.2"
+    fflate "^0.8.2"
     table "^6.9.0"
 
 "@tonstudio/parser-runtime@0.0.1":
@@ -2496,6 +2506,18 @@
     "@vitest/pretty-format" "3.1.4"
     loupe "^3.1.3"
     tinyrainbow "^2.0.0"
+
+"@vscode/debugadapter@^1.68.0":
+  version "1.68.0"
+  resolved "https://registry.yarnpkg.com/@vscode/debugadapter/-/debugadapter-1.68.0.tgz#abb23463cb750ca4a6f0834c5d4db659258dc159"
+  integrity sha512-D6gk5Fw2y4FV8oYmltoXpj+VAZexxJFopN/mcZ6YcgzQE9dgq2L45Aj3GLxScJOD6GeLILcxJIaA8l3v11esGg==
+  dependencies:
+    "@vscode/debugprotocol" "1.68.0"
+
+"@vscode/debugprotocol@1.68.0":
+  version "1.68.0"
+  resolved "https://registry.yarnpkg.com/@vscode/debugprotocol/-/debugprotocol-1.68.0.tgz#e558ba6affe1be7aff4ec824599f316b61d9a69d"
+  integrity sha512-2J27dysaXmvnfuhFGhfeuxfHRXunqNPxtBoR3koiTOA9rdxWNDTa1zIFLCFMSHJ9MPTPKFcBeblsyaCJCIlQxg==
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"
