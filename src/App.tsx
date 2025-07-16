@@ -7,6 +7,13 @@ import {
   useThrottledCallback,
 } from "@mantine/hooks";
 import type monaco from "monaco-editor/esm/vs/editor/editor.api";
+// NOTE: temporary, should move elsewhere
+import { PackageFileFormat } from '@tact-lang/compiler';
+import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
+import { toNano, contractAddress, Cell, StateInit, ContractABI } from '@ton/core';
+// beginCell
+// import { AllocationCell } from "@tact-lang/compiler/dist/storage/operation";
+// import { allocate, getAllocationOperationFromField } from '@tact-lang/compiler/dist/storage/allocator';
 
 import "./App.css";
 import { type Lesson } from "./types";
@@ -24,6 +31,17 @@ const lessons: Lesson[] = [
   })),
   chapter0.last,
 ];
+let blockchain: undefined | Blockchain;
+// let blockchainDebugLogs: undefined | string[];
+let deployer: undefined | SandboxContract<TreasuryContract>;
+(async () => {
+  blockchain = await Blockchain.create({ config: 'slim' });
+  blockchain.verbosity.print = false;
+  blockchain.verbosity.debugLogs = true;
+  blockchain.verbosity.blockchainLogs = false;
+  blockchain.verbosity.vmLogs = 'none';
+  deployer = await blockchain.treasury('deployer', { workchain: 0 });
+})();
 
 function App() {
   const [hash, setHash] = useHash();
@@ -209,16 +227,23 @@ function LeftPane({ currentExample, currentIndex, setHash }: LeftPaneProps) {
 
 type RightPaneProps = { defaultContent: string, isDarkTheme: boolean };
 
+const RightPaneOutputs = {
+  default: "💾 Use Ctrl/Cmd+S to compile and deploy!",
+  error: "❌ Fix errors and press Ctrl/Cmd+S to recompile.",
+  compiled: "✅ Compiled without errors.",
+  deployed: "🚀 Deployed the contract.",
+  notDeployed: "❌ Could not deploy the contract, try simpler initial data.",
+};
+
 function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
-  const defaultOutput = "Use Ctrl/Cmd+S to compile and deploy!";
-  const errorOutput = "Fix errors and press Ctrl/Cmd+S to recompile.";
-  const rightOutput = "Compiled without errors!";
   // NOTE: consider moving the output state into the sub-component for the output itself
-  const [output, setOutput] = React.useState(defaultOutput);
+  // NOTE: consider making output animate new lines, by placing each one in a span
+  //       or by having a different state management regarding the lines as string[]
+  const [output, setOutput] = React.useState(RightPaneOutputs.default);
   const editorRef = React.useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const monacoRef = React.useRef<typeof monaco>(null);
 
-  // Removes markers from the editor
+  /** Removes markers from the editor */
   const resetEditorMarkers = () => {
     if (!editorRef.current) return;
     if (!monacoRef.current) return;
@@ -226,6 +251,11 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
     if (!model) return;
     monacoRef.current.editor.setModelMarkers(model, 'default', []);
   };
+
+  /** Appends the data to the output */
+  const extendOutput = (data: string) => {
+    setOutput(prev => (prev + "\n" + data));
+  }
 
   // Will be executed at most every X seconds, even if it's called a lot.
   const throttledCompileDeployLoop = useThrottledCallback(async () => {
@@ -239,12 +269,81 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
     const buildRes = await compile(fs);
     if (buildRes.ok) {
       monacoRef.current.editor.setModelMarkers(model, 'default', []);
-      setOutput(rightOutput);
+      setOutput(RightPaneOutputs.compiled);
+      // console.log(buildRes);
+      const contractFileBuf = [...buildRes.files.keys()].find((v) => {
+        if (v.match(/editor_\w+\.pkg$/) !== null) return true;
+        return false;
+      });
+      if (!contractFileBuf) return;
+      const contractPkg: PackageFileFormat = JSON.parse(
+        new TextDecoder().decode(buildRes.files.get(contractFileBuf)!)
+      );
+      const contractAbi: ContractABI = JSON.parse(contractPkg.abi);
+      console.log(contractPkg);
+      console.log(contractAbi);
+      // If there are no receivers contract cannot be deployed.
+      if (!contractAbi.receivers) {
+        extendOutput("❌ Could not deploy due to lack of receivers!");
+        return;
+      }
+      // If there is no empty receiver, do not support the deployment.
+      if (!contractAbi.receivers.find((recv) => (
+        recv.receiver === 'internal' && recv.message.kind === 'empty'
+      ))) {
+        extendOutput("❌ Could not deploy because there is no empty message receiver!");
+        return;
+      }
+      // contractPkg.init.args[0].type;
+      // L168, src/bindings/writeTypescript.ts
+      // const allocations: Record<
+      //   string,
+      //   {
+      //     size: { bits: number; refs: number };
+      //     root: AllocationCell;
+      //   }
+      // > = {};
+      // const ops = contractPkg.init.args.map((v) => ({
+      //   name: v.name,
+      //   type: v.type,
+      //   op: getAllocationOperationFromField(
+      //     v.type,
+      //     (s) => allocations[s]!.size,
+      //   ),
+      // }));
+      // // L329, src/storage/allocator.ts
+      // const allocation = allocate({
+      //   reserved: { bits: contractPkg.init.prefix ? contractPkg.init.prefix.bits : 0, refs: 1 },
+      //   ops,
+      // });
+      // console.log(allocation);
+      if (!blockchain || !deployer) return;
+      const contractInit: StateInit = {
+        code: Cell.fromBase64(contractPkg.code),
+      };
+      const contractAddr = contractAddress(0, contractInit);
+      const res = await deployer.send({
+        to: contractAddr,
+        value: toNano(1),
+        init: contractInit,
+      });
+      const tr = res.transactions[1];
+      if (tr && tr.description.type === 'generic' &&
+        tr.description.computePhase.type === 'vm' &&
+        tr.description.computePhase.exitCode <= 1 &&
+        tr.description.computePhase.exitCode >= 0) {
+        extendOutput(RightPaneOutputs.deployed);
+      } else {
+        extendOutput(RightPaneOutputs.notDeployed);
+        return;
+      }
+      const logs: string[] = (blockchain.executor as any).debugLogs ?? [];
+      extendOutput(logs.join('\n'));
       return;
     }
 
     // console.log(buildRes);
-    setOutput(errorOutput);
+    setOutput(RightPaneOutputs.error);
     monacoRef.current.editor.setModelMarkers(model, 'default', buildRes.error.map((v) => {
       const msgStart = v.message.indexOf(' ') + 1;
       const msgEnd = v.message.indexOf('\n');
@@ -282,7 +381,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
     resetEditorMarkers();
     // NOTE: once the button row will be generated,
     //       make sure to reset it here
-    setOutput(defaultOutput);
+    setOutput(RightPaneOutputs.default);
   }, [defaultContent]);
 
   // React.useEffect(() => {
@@ -320,6 +419,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
             lineNumbersMinChars: 3,
             padding: { top: 4 },
             renderLineHighlight: 'all',
+            fixedOverflowWidgets: true,
           }}
           beforeMount={(monaco) => {
             monaco.languages.register({

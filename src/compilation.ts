@@ -24,6 +24,10 @@ export async function compile(
       name: projectName,
       output: "output",
       path: "editor.tact",
+      options: {
+        debug: true,
+        external: true,
+      },
     }],
   };
   const logger = new Logger(0);
@@ -149,6 +153,8 @@ export type CompileResult = {
 } | {
   ok: true;
   version: string;
+  // NOTE: a hack:
+  // files: Map<string, Uint8Array>;
   files: Map<string, Buffer>;
   projectConfig: Project;
 };

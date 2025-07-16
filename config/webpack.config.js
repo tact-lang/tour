@@ -350,6 +350,11 @@ module.exports = function(webpackEnv) {
         path: require.resolve('path-browserify'),
         crypto: false,
         process: false,
+        // The following are @ton/sandbox-related polyfills:
+        net: false,
+        url: false,
+        '@ton/test-utils': false,
+        '@jest/globals': false,
       },
     },
     module: {
