@@ -61,6 +61,14 @@ function App() {
 
   return (
     <div className="App">
+      <a
+        href="https://docs.ton.org/tolk/overview"
+        className="top-banner"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span>Deprecated! Please, learn the Tolk language at <b>docs.ton.org</b></span>
+      </a>
       <nav className="navbar">
         <a href="/" className="logo">
           <img
@@ -324,9 +332,11 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
       const contractAddr = contractAddress(0, contractInit);
       const res = await deployer.send({
         to: contractAddr,
-        value: toNano(1),
+        value: toNano(2),
         init: contractInit,
       });
+      // NOTE: here could be processing of all the transactions made
+      // see src/hooks/contract.hooks.ts, L151 and L407
       const tr = res.transactions[1];
       if (tr && tr.description.type === 'generic' &&
         tr.description.computePhase.type === 'vm' &&
@@ -388,7 +398,7 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
   //   const interval = setInterval(() => {
   //   }, 1500);
   //   return () => clearInterval(interval);
-  // });
+  // }, []);
 
   // Handle Ctrl/Cmd+s keypresses
   React.useEffect(() => {
@@ -400,7 +410,12 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  });
+  }, [throttledCompileDeployLoop]); // ← only render once.
+
+  // Alternative:
+  // useHotkeys([
+  //   ['mod+s', throttledCompileDeployLoop],
+  // ], []);
 
   return (<>
     <section id="right">
