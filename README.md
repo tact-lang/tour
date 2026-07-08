@@ -1,3 +1,7 @@
+> [!CAUTION]
+> This project is deprecated. For up-to-date guidance on TON contract development, see
+> the [smart contracts overview](https://docs.ton.org/contracts/overview) in TON Docs.
+
 # Tour of Tact
 
 Developed by [TON Studio](https://tonstudio.io), powered by the community.

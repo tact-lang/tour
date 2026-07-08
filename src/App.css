@@ -18,6 +18,40 @@
   flex-direction: column;
 }
 
+/* Top banner */
+
+.top-banner {
+  position: relative;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.625rem 1.5rem;
+
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.35;
+  text-align: center;
+  text-decoration: none;
+
+  background: #ee0f0f;
+  transition: color 0.15s ease-in-out;
+}
+
+.top-banner:hover,
+.top-banner:focus {
+  color: #eeeeee;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.top-banner span {
+  min-width: 0;
+}
+
 /* Navbar */
 
 .navbar {
@@ -131,6 +165,7 @@ html.theme-dark .logo-dark {
   overflow: hidden;
   flex-grow: 1;
   min-height: 15rem;
+  max-height: 80vh;
 }
 
 textarea {
