@@ -410,7 +410,12 @@ function RightPane({ defaultContent, isDarkTheme }: RightPaneProps) {
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []); // ← only render once.
+  }, [throttledCompileDeployLoop]); // ← only render once.
+
+  // Alternative:
+  // useHotkeys([
+  //   ['mod+s', throttledCompileDeployLoop],
+  // ], []);
 
   return (<>
     <section id="right">
